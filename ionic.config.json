@@ -1,0 +1,7 @@
+{
+  "name": "bloodConnect",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
