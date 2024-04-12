@@ -1,0 +1,73 @@
+ion-content {
+  --ion-background-color: #ffff;
+}
+
+ion-input {
+  color: "black";
+}
+
+img {
+  height: 261px;
+  width: auto;
+  margin: auto;
+  display: block;
+}
+
+.mycolor {
+  --background: var(--ion-color-btn);
+}
+
+.page-link {
+  color: #8a0303;
+}
+
+.myHeader {
+  text-align: center;
+  color: #8a0303;
+  font-weight: 800;
+}
+
+ion-button {
+  font-size: 1.2rem;
+}
+
+.login {
+  color: #8a0303;
+  margin-left: 1rem;
+}
+
+p {
+  color: #000;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+ion-input,
+ion-button {
+  width: 100%;
+  max-width: 300px;
+}
+
+@media only screen and (max-width: 600px) {
+  .myHeader {
+    font-size: 20px;
+  }
+}
+
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  .myHeader {
+    font-size: 22px;
+  }
+}
+
+
+@media only screen and (min-width: 1025px) {
+  .myHeader {
+    font-size: 28px;
+  }
+}

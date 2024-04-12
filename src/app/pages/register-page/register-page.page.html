@@ -1,0 +1,88 @@
+<ion-content [fullscreen]="true">
+  <h1 class="myHeader">BLOOD CONNECT</h1>
+  <img alt="car" src="../../../assets/images/bloodConnect.png" />
+  <h2 class="register">Register</h2>
+  <form class="ion-padding-top" class="ion-padding">
+    <ion-input
+      class="ion-text-center"
+      fill="outline"
+      type="text"
+      placeholder="Enter First Name"
+      name="firstName"
+      id="firstName"
+      style="--placeholder-color: black"
+    ></ion-input>
+    <br />
+    <ion-input
+      class="ion-text-center"
+      fill="outline"
+      type="text"
+      placeholder="Enter Last Name"
+      name="firstName"
+      id="lastName"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+
+    <ion-input
+      class="ion-text-center"
+      fill="outline"
+      type="email"
+      placeholder="Enter Email"
+      name="email"
+      id="email"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+
+    <ion-input
+      class="ion-text-center"
+      type="text"
+      fill="outline"
+      placeholder="Address"
+      id="address"
+      name="address"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+
+    <ion-input
+      class="ion-text-center"
+      type="tel"
+      fill="outline"
+      placeholder="Phone Number"
+      name="phoneNumber"
+      id="phoneNumber"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+
+    <ion-input
+      class="ion-text-center"
+      type="password"
+      fill="outline"
+      placeholder="Enter password"
+      name="password"
+      id="password"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit">
+      Register
+    </ion-button>
+  </form>
+  <div class="ion-text-center">
+    <p>
+      Already have an account? <br /><a
+        routerLink="/login-page"
+        class="page-link"
+        >Login here</a
+      >
+    </p>
+  </div>
+</ion-content>

@@ -1,0 +1,40 @@
+<ion-content [fullscreen]="true">
+  <h1 class="myHeader">BLOOD CONNECT</h1>
+  <img alt="car" src="../../../assets/images/bloodConnect.png" />
+  <h2 class="login">LOGIN</h2>
+  <form class="ion-padding-top" class="ion-padding">
+    <ion-input
+      class="ion-text-center"
+      fill="outline"
+      type="email"
+      placeholder="Enter Email"
+      name="email"
+      id="email"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+
+    <ion-input
+      class="ion-text-center"
+      type="password"
+      fill="outline"
+      placeholder="Enter password"
+      name="password"
+      id="password"
+      style="--placeholder-color: black"
+    ></ion-input>
+
+    <br />
+    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit" routerLink="/home">
+      Login
+    </ion-button>
+  </form>
+  <div class="ion-text-center">
+    <p>
+      Not registered yet? <br /><a routerLink="/register-page" class="page-link"
+        >Create account here</a
+      >
+    </p>
+  </div>
+</ion-content>
