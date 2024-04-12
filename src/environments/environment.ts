@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: "AIzaSyBCeeb0q-hAs6OHFYAuXW5awqee63cWPv0",
+    authDomain: "bloodconnect-c897c.firebaseapp.com",
+    projectId: "bloodconnect-c897c",
+    storageBucket: "bloodconnect-c897c.appspot.com",
+    messagingSenderId: "46386487924",
+    appId: "1:46386487924:web:5059a0f015c9b8ccc12721"
+  }
 };
 
 /*
