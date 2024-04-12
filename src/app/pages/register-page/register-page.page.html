@@ -10,6 +10,7 @@
       placeholder="Enter First Name"
       name="firstName"
       id="firstName"
+      [(ngModel)]="userData.firstName"
       style="--placeholder-color: black"
     ></ion-input>
     <br />
@@ -18,8 +19,9 @@
       fill="outline"
       type="text"
       placeholder="Enter Last Name"
-      name="firstName"
+      name="lastName"
       id="lastName"
+      [(ngModel)]="userData.lastName"
       style="--placeholder-color: black"
     ></ion-input>
 
@@ -32,6 +34,7 @@
       placeholder="Enter Email"
       name="email"
       id="email"
+      [(ngModel)]="userData.email"
       style="--placeholder-color: black"
     ></ion-input>
 
@@ -44,6 +47,7 @@
       placeholder="Address"
       id="address"
       name="address"
+      [(ngModel)]="userData.address"
       style="--placeholder-color: black"
     ></ion-input>
 
@@ -56,6 +60,7 @@
       placeholder="Phone Number"
       name="phoneNumber"
       id="phoneNumber"
+      [(ngModel)]="userData.phoneNumber"
       style="--placeholder-color: black"
     ></ion-input>
 
@@ -68,11 +73,12 @@
       placeholder="Enter password"
       name="password"
       id="password"
+      [(ngModel)]="userData.password"
       style="--placeholder-color: black"
     ></ion-input>
 
     <br />
-    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit">
+    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit" (click)="signup()">
       Register
     </ion-button>
   </form>
