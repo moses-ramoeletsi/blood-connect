@@ -18,4 +18,11 @@ export class UserService {
   saveUserDetails(data: any){
     return this.firebaseStore.collection("users").doc(data.uid).set(data);
   }
+
+  loginWithEmail(data: { email: string; password: string; }) {
+    return this.userAuth.signInWithEmailAndPassword(data.email, data.password);
+  }
+  getUserDetails(data: any){
+    return this.firebaseStore.collection("users").doc(data.uid).valueChanges()
+  }
 }
