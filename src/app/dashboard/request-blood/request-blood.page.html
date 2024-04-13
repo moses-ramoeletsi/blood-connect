@@ -99,11 +99,11 @@
               </ion-toolbar>
             </ion-header>
             <ion-content class="ion-padding"> 
-              <form class="requestBlood-form">
-               <ion-input label=" Name" name="name" label-placement="floating" fill="outline" placeholder=" Enter Name"></ion-input> <br>
-               <ion-input label="Address" name="address" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
-               <ion-input label="Phone Number"  name="phoneNumber" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
-               <ion-select label="Blood Group" name="bloodGroup" label-placement="floating" fill="outline">
+              <form class="requestBlood-form" (ngSubmit)="submitForm()">
+                <ion-input label="Name" name="name" [(ngModel)]="bloodRequetsForm.firstName" label-placement="floating" fill="outline" placeholder="Enter Name"></ion-input> <br>
+                <ion-input label="Address" name="address" [(ngModel)]="bloodRequetsForm.address" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
+                <ion-input label="Phone Number" name="phoneNumber" [(ngModel)]="bloodRequetsForm.phoneNumber" label-placement="floating" fill="outline" placeholder="Enter Phone Number"></ion-input> <br>
+                <ion-select label="Blood Group" name="bloodGroup" [(ngModel)]="bloodRequetsForm.bloodGroup" label-placement="floating" fill="outline">
                   <ion-select-option value="A+">A+</ion-select-option>
                   <ion-select-option value="B+">B+</ion-select-option>
                   <ion-select-option value="AB+">AB+</ion-select-option>
@@ -113,15 +113,16 @@
                   <ion-select-option value="AB-">AB-</ion-select-option>
                   <ion-select-option value="O-">O-</ion-select-option>
                 </ion-select><br>
-               <ion-select label="Transfusion Type" name="transfusionType" label-placement="floating" fill="outline">
-                <ion-select-option value="recipient">Recipient</ion-select-option>
-                <ion-select-option value="hospital">Hospital</ion-select-option>
-                <ion-select-option value="bloodBank">Blood Bank</ion-select-option>
+                <ion-select label="Transfusion Type" name="transfusionType" [(ngModel)]="bloodRequetsForm.transfusionType" label-placement="floating" fill="outline">
+                  <ion-select-option value="recipient">Recipient</ion-select-option>
+                  <ion-select-option value="hospital">Hospital</ion-select-option>
+                  <ion-select-option value="bloodBank">Blood Bank</ion-select-option>
                 </ion-select><br>
-               <ion-textarea label="Location" name="location" label-placement="floating" fill="outline" placeholder="You Location"></ion-textarea> <br>
+                <!-- <ion-textarea label="Location" name="location" [(ngModel)]="bloodRequetsForm.location" label-placement="floating" fill="outline" placeholder="Your Location"></ion-textarea> <br> -->
+                
+                <ion-button class="mycolor" type="submit" expand="block">Submit</ion-button>
+              </form>
               
-               <ion-button class="mycolor" type="submit" expand="block">Submit</ion-button>
-             </form>
             </ion-content>
           </ng-template>
         </ion-modal>
