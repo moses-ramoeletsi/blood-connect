@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestBloodService } from 'src/app/services/request-blood.service';
 
 @Component({
   selector: 'app-request-blood',
@@ -6,8 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./request-blood.page.scss'],
 })
 export class RequestBloodPage implements OnInit {
-  
-  bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
+  bloodRequetsForm ={
+    firstName: "",
+    address: "",
+    phoneNumber: "",
+    bloodGroup: "",
+    transfusionType: ""
+  }
+  bloodGroups:string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
   loaded: boolean = false;
   showSkeleton: boolean = true;
@@ -21,7 +28,9 @@ export class RequestBloodPage implements OnInit {
   toggleNearByDonorContent() {
     this.showNearByDonorContent = !this.showNearByDonorContent;
   }
-constructor() { 
+constructor(
+ public firebaseService: RequestBloodService
+) { 
   
 }
   ngOnInit() {
@@ -30,5 +39,18 @@ constructor() {
       
     }, 3000); 
   }
+
+  submitForm() {
+    this.firebaseService.addRequest(this.bloodRequetsForm)
+      .then(res => {
+        console.log('Request added successfully!');
+        // You can handle success actions here
+      })
+      .catch(error => {
+        console.error('Error adding request: ', error);
+        // You can handle error actions here
+      });
+  }
+
 
 }
