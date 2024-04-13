@@ -10,7 +10,7 @@
       placeholder="Enter Email"
       name="email"
       id="email"
-      style="--placeholder-color: black"
+      [(ngModel)] = "userLogin.email"
     ></ion-input>
 
     <br />
@@ -22,11 +22,11 @@
       placeholder="Enter password"
       name="password"
       id="password"
-      style="--placeholder-color: black"
+      [(ngModel)] = "userLogin.password"
     ></ion-input>
 
     <br />
-    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit" routerLink="/home">
+    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit" (click)="login()">
       Login
     </ion-button>
   </form>
