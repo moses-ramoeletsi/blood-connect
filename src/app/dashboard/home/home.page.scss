@@ -13,6 +13,10 @@ ion-content {
   --ion-padding-top: 10px;
   --ion-padding-bottom: 10px;
 }
+ion-content h3 {
+  color: black;
+  margin-left: 1.5rem;
+}
 
 .myMenu {
   --background: var(--ion-color-menu);
@@ -43,7 +47,6 @@ ion-img {
 
 ion-grid {
   margin-top: 2%;
-  // height: max-content;
 }
 
 ion-grid ion-img {
@@ -81,7 +84,7 @@ ion-grid ion-card-content {
   justify-content: center;
   align-items: center;
   margin-bottom: 5px;
-  margin-top: -20px;
+  margin-top: -10px;
 }
 
 .tips-card {
