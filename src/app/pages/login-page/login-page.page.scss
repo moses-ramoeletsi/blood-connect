@@ -45,7 +45,9 @@ form {
   flex-direction: column;
   align-items: center;
 }
-
+form ion-input {
+  color: black;
+}
 ion-input,
 ion-button {
   width: 100%;
