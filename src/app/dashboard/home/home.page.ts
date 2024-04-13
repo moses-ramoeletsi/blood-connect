@@ -1,5 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, interval } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Observable, Subscription, filter, interval, map, switchMap } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { UserDetails } from './../../shared/userDetails';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +10,8 @@ import { Subscription, interval } from 'rxjs';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-userName: any;
+userName: string ="";
+user: Observable<UserDetails | null>;
 upcomingEvents: any[];
 currentTipIndex: number = 0;
   tips: string[] = [
@@ -19,24 +23,38 @@ currentTipIndex: number = 0;
     "Follow any post-donation instructions provided by the blood donation center."
   ];
   private timerSubscription!: Subscription;
+  
+  constructor(
+    public fireServices: UserService,
+    public afAuth: AngularFireAuth,
+  ) {
+    this.user = this.afAuth.authState.pipe(
+      filter(user => user !== null),
+      switchMap((user) => {
+        return this.fireServices.getUserDetails(user);
+      }),
+      map(userDetails => userDetails as UserDetails)
+    );
 
-  constructor() {
+    this.user.subscribe((userDetails) => {
+      if (userDetails) {
+        this.userName = userDetails.firstName;
+      }
+    })
     this.upcomingEvents = [
       { name: 'Event 1', date: '2024-04-15', location: 'Location 1', description: 'Description 1' },
       { name: 'Event 2', date: '2024-04-20', location: 'Location 2', description: 'Description 2' },
-      // Add more events as needed
     ];
   }
 
+
   ngOnInit() {
-    // Start the timer to show tips every 5 seconds
     this.timerSubscription = interval(5000).subscribe(() => {
       this.showNextTip();
     });
   }
 
   ngOnDestroy() {
-    // Unsubscribe from the timer when the component is destroyed
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
