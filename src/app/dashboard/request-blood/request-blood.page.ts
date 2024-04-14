@@ -21,6 +21,7 @@ export class RequestBloodPage implements OnInit {
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
   selectedBloodGroup: string | null = null;
+  showMatchingResults: boolean = false;
 
   constructor(
     public firebaseService: RequestBloodService,
@@ -41,8 +42,11 @@ export class RequestBloodPage implements OnInit {
   }
   selectBloodGroup(bloodGroup: string) {
     this.selectedBloodGroup = bloodGroup;
+    this.showMatchingResults = true;
     this.fetchDonors();
   }
+
+
 
   toggleNearByDonorContent() {
     this.showNearByDonorContent = !this.showNearByDonorContent;
