@@ -41,15 +41,15 @@
             <ion-label>Back</ion-label>
           </ion-buttons>
         </div>
-        <form class="feedback-form">
+        <form class="feedback-form" (ngSubmit)="submitFeedBack()">
            <h1>Feedback Form</h1>
-          <ion-input label=" Name" label-placement="floating" fill="outline" placeholder=" Enter Name"></ion-input> <br>
-          <ion-input label="Email (optional)" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
-          <ion-select label="FeedBack  type" label-placement="floating" fill="outline">
+          <ion-input label=" Name" name="name" label-placement="floating" [(ngModel)]="feedBackForm.name" fill="outline" placeholder=" Enter Name"></ion-input> <br>
+          <ion-input label="Email (optional)"name="emal" [(ngModel)]="feedBackForm.email" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
+          <ion-select label="FeedBack  type"name="feedBackType" [(ngModel)]="feedBackForm.feedBackType" label-placement="floating" fill="outline">
             <ion-select-option value="suggestion">Suggestion</ion-select-option>
             <ion-select-option value="issue">Issue</ion-select-option>
           </ion-select><br>
-          <ion-textarea label="Message" label-placement="floating" fill="outline" placeholder="......."></ion-textarea> <br>
+          <ion-textarea label="Message"name="message" [(ngModel)]="feedBackForm.message" label-placement="floating" fill="outline" placeholder="......."></ion-textarea> <br>
          
           <ion-button class="mycolor" type="submit" expand="block">Submit</ion-button>
         </form>
