@@ -9,21 +9,18 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./login-page.page.scss'],
 })
 export class LoginPagePage implements OnInit {
-
   userLogin = {
-    email: "",
-    password: ""
-  }
+    email: '',
+    password: '',
+  };
 
   constructor(
     public fireServices: UserService,
     public alertController: AlertController,
-    public router: Router,
+    public router: Router
+  ) {}
 
-  ) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   login() {
     this.fireServices
@@ -43,11 +40,10 @@ export class LoginPagePage implements OnInit {
         });
       })
       .catch((error) => {
-        console.error('Error logging in:', error);
         this.showAlert('User Not Found', 'The user does not exist.');
       });
   }
-  
+
   showAlert(title: string, message: string) {
     this.alertController
       .create({
@@ -58,5 +54,3 @@ export class LoginPagePage implements OnInit {
       .then((alert) => alert.present());
   }
 }
-
-

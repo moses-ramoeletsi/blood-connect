@@ -1,284 +1,272 @@
 ion-menu::part(backdrop) {
-    background-color: rgba(138, 3, 3, 0.5)
-  }
-  
-  ion-menu::part(container) {
-    border-radius: 0 20px 20px 0;
-    width: 55%;
-    box-shadow: 10px 0px 16px rgba(141, 33, 33, 0.18);
-  }
-  
-  ion-content{
-    --ion-background-color:#ffff;
-  }
-  
-  .myMenu{
-    --background: var(--ion-color-menu);
-  }
-  
-  .mycolor{
-    --background: var(--ion-color-btn);
+  background-color: rgba(138, 3, 3, 0.5)
 }
-  .menuContent{
-    --background: var(--ion-color-menu);
-    height: 125px;
-    border-bottom-left-radius: 90%;
-    border-bottom-right-radius: 90%;
-  }
-  
-  img{
-    height: 100px;
-    width: auto;
-    margin: auto;
-    display: block;
-  }
-  .logo{
-    height: 40px;
-    width: 45px;
-    margin-top:2rem;
-    display: block;
-  }
-  ion-grid{
-    margin-top: 10%;
-    height: max-content;
-  }
-  ion-img{
-    font-size: 3rem;
-    position: absolute;
-    margin-top: 5%;
-    left: 50%;
-    height: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    display: block; 
-    color:  black;
-  }
-  
-  ion-card-content{
-    text-align: center;
-    margin-top: 10%;
-    color: black;
-  }
 
-  .blood-group-card {
-    background-color: #fffffff5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 0.85rem;
-    border: 1px solid #8a030380;
-    max-width: 200px;
-    margin: auto; 
+ion-menu::part(container) {
+  border-radius: 0 20px 20px 0;
+  width: 55%;
+  box-shadow: 10px 0px 16px rgba(141, 33, 33, 0.18);
+}
 
-  }
-  
-  .blood-group-label {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center; 
-    margin-top: 0.5rem; 
-    width: 100%;
-  }
-  .selected-blood-groups {
-    text-align: center; 
-  }
-  
-  .selected-blood-groups .ion-row {
-    margin-top: 20px; 
-  }
-  
-  .selected-blood-groups .ion-col {
-    margin-left: auto;
-    margin-right: auto; 
-  }
- 
-  
-  .selected-blood-group h2 {
-    text-align: center; 
-    margin: 0 auto; 
-  }
-  
-  .match-blood-group-card {
-    background-color: #fffffff5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #8a030380;
-    max-width: 600px;
-    margin: auto;
-    padding: 10px;
-  }
-  
-  .avatar {
-    border: 2px solid #8a0303;
-    width: 7rem;
-    height: 7rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto; 
-  }
-  
-  .match-blood-group-label {
-    font-size: 2rem;
-    font-weight: 600;
-    text-align: center;
-  }
-  
-  .additional-info {
-    display: flex;
+ion-content {
+  --ion-background-color: #ffff;
+}
+
+.myMenu {
+  --background: var(--ion-color-menu);
+}
+
+.mycolor {
+  --background: var(--ion-color-btn);
+}
+
+.menuContent {
+  --background: var(--ion-color-menu);
+  height: 125px;
+  border-bottom-left-radius: 90%;
+  border-bottom-right-radius: 90%;
+}
+
+img {
+  height: 100px;
+  width: auto;
+  margin: auto;
+  display: block;
+}
+
+.logo {
+  height: 40px;
+  width: 45px;
+  margin-top: 2rem;
+  display: block;
+}
+
+ion-grid {
+  margin-top: 10%;
+  height: max-content;
+}
+
+ion-img {
+  font-size: 3rem;
+  position: absolute;
+  margin-top: 5%;
+  left: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  display: block;
+  color: black;
+}
+
+ion-card-content {
+  text-align: center;
+  margin-top: 10%;
+  color: black;
+}
+
+.blood-group-card {
+  background-color: #fffffff5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.85rem;
+  border: 1px solid #8a030380;
+  max-width: 200px;
+  margin: auto;
+
+}
+
+.blood-group-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.selected-blood-groups {
+  text-align: center;
+}
+
+.selected-blood-groups .ion-row {
+  margin-top: 20px;
+}
+
+.selected-blood-groups .ion-col {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.selected-blood-group h2 {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.match-blood-group-card {
+  background-color: #fffffff5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #8a030380;
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+}
+
+.avatar {
+  border: 2px solid #8a0303;
+  width: 7rem;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.match-blood-group-label {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.additional-info {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.additional-info p {
+  color: black;
+  margin: 5px 0;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .ion-row {
     flex-direction: column;
-    padding-left: 10px;
-  }
-  
-  .additional-info p {
-    color: black;
-    margin: 5px 0;
-  }
-  
-  
-  @media only screen and (max-width: 600px) {
-    .ion-row {
-      flex-direction: column; 
-    }
-    .avatar,
-    .additional-info {
-      margin: auto; 
-    }
-  }
-  
-  ion-fab-button {
-    --background: #8a0303;
-    
   }
 
-  ion-label{
-    color: black;
+  .avatar,
+  .additional-info {
+    margin: auto;
   }
-  h2 {
-    color: black;
-    font-weight: 600;
-  }
+}
+
+ion-fab-button {
+  --background: #8a0303;
+
+}
+
+ion-label {
+  color: black;
+}
+
+h2 {
+  color: black;
+  font-weight: 600;
+}
 
 ion-modal {
-    --background: transparent; 
-  }
-  
-  ion-modal ion-header ion-toolbar ion-img {
-    width: 300px;
-    display: block;
-    margin: 0 auto;
-  }
-    ion-modal ion-item {
-      --background: transparent;
-      margin-bottom: 15px;
-    }
-  
-    ion-modal ion-item  ion-label{
-      color: black;
-    }
-  
- 
-  ion-modal ion-header  ion-toolbar{
-    --background: #8a0303;
-  }
-  
-  
-  ion-modal ion-content {
-    --background: #f4f5f8; 
-  }
-  
-
-  ion-modal ion-content form {
-    padding: 20px;
-  }
-  
- 
-  ion-modal ion-content ion-item {
-    margin-bottom: 15px;
-  }
-  
-
-  ion-modal ion-content ion-button {
-    margin-top: 10px;
-    --background: #8a0303; 
-    --color: #fff; 
-  }
-
-  .donors {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .donors h2 {
-    text-align: center; 
-    margin: 0 auto; 
-  }
-  
-  .match-donor-card {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    justify-content: center; 
-    background-color: #fffffff5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #8a030380;
-    max-width: 800px;
-    width: 100%;
-  }
-  
-  .match-donor-avatar{
-    border: 2px solid #8a0303;
-    width: 7rem;
-    height: 7rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px; 
-  }
-  
-  .match-donor-avatar ion-label {
-    font-size: 2rem;
-    font-weight: 600;
-  }
-  
-  .match-donor-details {
-    text-align: center;
-    width: 100%;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  @media screen and (min-width: 600px) {
-    .match-donor-details {
-      max-width: 400px; 
-    }
-  }
-  
-  .donor-card ion-card-content {
-    padding: 5px; 
-  }
-  .donor-card ion-card-content ion-card-title  {
-    color: black; 
-  }
-  
-  .donor-card ion-card-content ion-card-subtitle  {
-    color: black; 
-  }
-  
-  .donor-blood-group {
-      background-color: #8a0303; 
-    color: #ffffff; 
-    border-radius: 20px; 
-    padding: 4px 12px; 
-    font-weight: bold;
+  --background: transparent;
 }
 
-  
+ion-modal ion-header ion-toolbar ion-img {
+  width: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+ion-modal ion-item {
+  --background: transparent;
+  margin-bottom: 15px;
+}
+
+ion-modal ion-item ion-label {
+  color: black;
+}
+
+
+ion-modal ion-header ion-toolbar {
+  --background: #8a0303;
+}
+
+
+ion-modal ion-content {
+  --background: #f4f5f8;
+}
+
+
+ion-modal ion-content form {
+  padding: 20px;
+}
+
+
+ion-modal ion-content ion-item {
+  margin-bottom: 15px;
+}
+
+
+ion-modal ion-content ion-button {
+  margin-top: 10px;
+  --background: #8a0303;
+  --color: #fff;
+}
+
+.donors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.donors h2 {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.match-donor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fffffff5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #8a030380;
+  max-width: 800px;
+  width: 100%;
+}
+
+.match-donor-avatar {
+  border: 2px solid #8a0303;
+  width: 7rem;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.match-donor-avatar ion-label {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.match-donor-details {
+  text-align: center;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (min-width: 600px) {
+  .match-donor-details {
+    max-width: 400px;
+  }
+}
+
 .requestBlood-form {
   max-width: 400px;
   margin: auto;
@@ -306,8 +294,8 @@ ion-label {
 
 ion-button[type="submit"] {
   margin-top: 10px;
-  --background: #8a0303; 
-  --color: #fff; 
+  --background: #8a0303;
+  --color: #fff;
   --border-radius: 8px;
   --padding-start: 20px;
   --padding-end: 20px;

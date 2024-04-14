@@ -1,21 +1,26 @@
 <ion-content [fullscreen]="true">
   <ion-app>
     <ion-menu contentId="main-content">
-        <ion-toolbar class="menuContent">
-          <img alt="blood Connect" src="../../../assets/images/bloodConnect.png" />
-        </ion-toolbar>
-    <ion-content class="content-padding" >
-      <ion-list lines="none">
-        <ion-item>
-          <ion-label [routerLink]="['/request-blood']">Request Blood</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label [routerLink]="['/donate-blood']">Donate Blood</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label [routerLink]="['/blood-banks']">Blood Banks</ion-label>
-        </ion-item>
-      </ion-list>
+      <ion-toolbar class="menuContent">
+        <img
+          alt="blood Connect"
+          src="../../../assets/images/bloodConnect.png"
+        />
+      </ion-toolbar>
+      <ion-content class="content-padding">
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label [routerLink]="['/request-blood']"
+              >Request Blood</ion-label
+            >
+          </ion-item>
+          <ion-item>
+            <ion-label [routerLink]="['/donate-blood']">Donate Blood</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label [routerLink]="['/blood-banks']">Blood Banks</ion-label>
+          </ion-item>
+        </ion-list>
       </ion-content>
     </ion-menu>
     <div class="ion-page" id="main-content">
@@ -25,8 +30,12 @@
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
           <ion-buttons slot="end">
-            <ion-avatar >
-              <ion-img  class="logo" alt="logo" src="../../../assets/images/bloodConnect.png"/>
+            <ion-avatar>
+              <ion-img
+                class="logo"
+                alt="logo"
+                src="../../../assets/images/bloodConnect.png"
+              />
             </ion-avatar>
           </ion-buttons>
         </ion-toolbar>
@@ -34,75 +43,95 @@
       <ion-content class="ion-padding" *ngIf="!showNearBySeekerContent">
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="12">
-            <div class="ion-text-start"> 
-              <ion-buttons routerLink="/home" style="color: black;">
+            <div class="ion-text-start">
+              <ion-buttons routerLink="/home" style="color: black">
                 <ion-icon name="chevron-back-outline"></ion-icon>
                 <ion-label>Back</ion-label>
               </ion-buttons>
             </div>
             <div class="ion-text-end">
-              <ion-button class="mycolor" (click)="toggleNearBySeekerContent()">Near By Seeker</ion-button>
+              <ion-button class="mycolor" (click)="toggleNearBySeekerContent()"
+                >Near By Seeker</ion-button
+              >
             </div>
           </ion-col>
         </ion-row>
-        
+
         <div class="choose-blood-group">
           <h2>Select Your Blood Group</h2>
           <ion-row class="ion-justify-content-center ion-align-items-center">
-            <ion-col size-lg="3" size-md="6" size-sm="12" size="12" *ngFor="let bloodGroup of bloodGroups">
-              <ion-card class="blood-group-card"  (click)="pickBloodGroup(bloodGroup)">
-                <ion-row class="ion-align-items-center"> 
+            <ion-col
+              size-lg="3"
+              size-md="6"
+              size-sm="12"
+              size="12"
+              *ngFor="let bloodGroup of bloodGroups"
+            >
+              <ion-card
+                class="blood-group-card"
+                (click)="pickBloodGroup(bloodGroup)"
+              >
+                <ion-row class="ion-align-items-center">
                   <ion-col size="12">
-                    <ion-label class="blood-group-label">{{ bloodGroup }}</ion-label>
+                    <ion-label class="blood-group-label"
+                      >{{ bloodGroup }}</ion-label
+                    >
                   </ion-col>
                 </ion-row>
               </ion-card>
             </ion-col>
           </ion-row>
         </div>
-       
-        <div *ngIf="pickedBloodGroup && showMatchingResults" class="picked-blood-group">
-          <h2>Your Blood Type Match Donor </h2>
+
+        <div
+          *ngIf="pickedBloodGroup && showMatchingResults"
+          class="picked-blood-group"
+        >
+          <h2>Your Blood Type Match Donor</h2>
           <ion-card class="match-blood-group-card">
-            <ion-row class="ion-align-items-center"> 
+            <ion-row class="ion-align-items-center">
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="avatar">
-                  <ion-label class="match-blood-group-label">{{ pickedBloodGroup }}</ion-label>
+                  <ion-label class="match-blood-group-label"
+                    >{{ pickedBloodGroup }}</ion-label
+                  >
                 </ion-avatar>
               </ion-col>
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
                   <p>Name: Moses</p>
                   <p>Phone Number: 5612 1920</p>
-                  <p>Location: Qoaling, Maseru Lesotho </p>
+                  <p>Location: Qoaling, Maseru Lesotho</p>
                   <p>Distance: 10 km</p>
                 </ion-label>
               </ion-col>
             </ion-row>
-          </ion-card>   
+          </ion-card>
         </div>
-        
+
         <div class="matching-blood-group" *ngIf="!showMatchingResults">
-          <h2>Available Recipients </h2>
+          <h2>Available Recipients</h2>
           <ion-card class="match-blood-group-card">
-            <ion-row class="ion-align-items-center"> 
+            <ion-row class="ion-align-items-center">
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="avatar">
-                  <ion-label class="match-blood-group-label">{{ pickedBloodGroup }}</ion-label>
+                  <ion-label class="match-blood-group-label"
+                    >{{ pickedBloodGroup }}</ion-label
+                  >
                 </ion-avatar>
               </ion-col>
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
                   <p>Name: Moses</p>
                   <p>Phone Number: 5612 1920</p>
-                  <p>Location: Qoaling, Maseru Lesotho </p>
+                  <p>Location: Qoaling, Maseru Lesotho</p>
                   <p>Distance: 10 km</p>
                 </ion-label>
               </ion-col>
             </ion-row>
-          </ion-card>   
+          </ion-card>
         </div>
-        
+
         <ion-fab slot="fixed" vertical="bottom" horizontal="end">
           <ion-fab-button id="open-modal">
             <ion-icon name="add"></ion-icon>
@@ -119,51 +148,97 @@
                 </ion-buttons>
               </ion-toolbar>
             </ion-header>
-            <ion-content class="ion-padding"> 
-              <form class="donateBlood-form">
-                <ion-input label=" Name" name="name" label-placement="floating" fill="outline" placeholder=" Enter Name"></ion-input> <br>
-                <ion-input label="Address" name="address" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
-                <ion-input label="Phone Number"  name="phoneNumber" label-placement="floating" fill="outline" placeholder="Enter Email"></ion-input> <br>
-                <ion-select label="Blood Group" name="bloodGroup" label-placement="floating" fill="outline">
-                   <ion-select-option value="A+">A+</ion-select-option>
-                   <ion-select-option value="B+">B+</ion-select-option>
-                   <ion-select-option value="AB+">AB+</ion-select-option>
-                   <ion-select-option value="O+">O+</ion-select-option>
-                   <ion-select-option value="A-">A-</ion-select-option>
-                   <ion-select-option value="B-">B-</ion-select-option>
-                   <ion-select-option value="AB-">AB-</ion-select-option>
-                   <ion-select-option value="O-">O-</ion-select-option>
-                 </ion-select><br>
-                <ion-select label="Transfusion Type" name="transfusionType" label-placement="floating" fill="outline">
-                 <ion-select-option value="donor">Donor</ion-select-option>
-                 <ion-select-option value="hospital">Hospital</ion-select-option>
-                 <ion-select-option value="bloodBank">Blood Bank</ion-select-option>
-                 </ion-select><br>
-                <ion-textarea label="Location" name="location" label-placement="floating" fill="outline" placeholder="You Location"></ion-textarea> <br>
-               
-                <ion-button class="mycolor" type="submit" expand="block">Submit</ion-button>
+            <ion-content class="ion-padding">
+              <form class="requestBlood-form" (ngSubmit)="submitForm()">
+                <ion-input
+                  label="Name"
+                  name="name"
+                  [(ngModel)]="bloodDonorForm.firstName"
+                  label-placement="floating"
+                  fill="outline"
+                  placeholder="Enter Name"
+                ></ion-input>
+                <br />
+                <ion-input
+                  label="Address"
+                  name="address"
+                  [(ngModel)]="bloodDonorForm.address"
+                  label-placement="floating"
+                  fill="outline"
+                  placeholder="Enter Email"
+                ></ion-input>
+                <br />
+                <ion-input
+                  label="Phone Number"
+                  name="phoneNumber"
+                  [(ngModel)]="bloodDonorForm.phoneNumber"
+                  label-placement="floating"
+                  fill="outline"
+                  placeholder="Enter Phone Number"
+                ></ion-input>
+                <br />
+                <ion-select
+                  label="Blood Group"
+                  name="bloodGroup"
+                  [(ngModel)]="bloodDonorForm.bloodGroup"
+                  label-placement="floating"
+                  fill="outline"
+                >
+                  <ion-select-option value="A+">A+</ion-select-option>
+                  <ion-select-option value="B+">B+</ion-select-option>
+                  <ion-select-option value="AB+">AB+</ion-select-option>
+                  <ion-select-option value="O+">O+</ion-select-option>
+                  <ion-select-option value="A-">A-</ion-select-option>
+                  <ion-select-option value="B-">B-</ion-select-option>
+                  <ion-select-option value="AB-">AB-</ion-select-option>
+                  <ion-select-option value="O-"
+                    >O-</ion-select-option
+                  > </ion-select
+                ><br />
+                <ion-select
+                  label="Transfusion Type"
+                  name="transfusionType"
+                  [(ngModel)]="bloodDonorForm.transfusionType"
+                  label-placement="floating"
+                  fill="outline"
+                >
+                  <ion-select-option value="donor">Donor</ion-select-option>
+                  <ion-select-option value="hospital"
+                    >Hospital</ion-select-option
+                  >
+                  <ion-select-option value="bloodBank"
+                    >Blood Bank</ion-select-option
+                  > </ion-select
+                ><br />
+                <!-- <ion-textarea label="Location" name="location" [(ngModel)]="bloodDonorForm.location" label-placement="floating" fill="outline" placeholder="Your Location"></ion-textarea> <br> -->
+
+                <ion-button class="mycolor" type="submit" expand="block"
+                  >Submit</ion-button
+                >
               </form>
             </ion-content>
           </ng-template>
         </ion-modal>
-
       </ion-content>
 
-      <ion-content class="ion-padding" *ngIf="showNearBySeekerContent" >
-        <div class="ion-col ion-text-start"> 
-          <ion-buttons (click)="toggleNearBySeekerContent()" style="color: black;">
+      <ion-content class="ion-padding" *ngIf="showNearBySeekerContent">
+        <div class="ion-col ion-text-start">
+          <ion-buttons
+            (click)="toggleNearBySeekerContent()"
+            style="color: black"
+          >
             <ion-icon name="chevron-back-outline"></ion-icon>
             <ion-label>Back</ion-label>
           </ion-buttons>
         </div>
-        
+
         <div class="recipients">
           <h2>Near By Recipients</h2>
           <ion-card class="match-recipient-card">
-            <ion-row> 
+            <ion-row>
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="match-recipient-avatar">
-                  <ion-label >{{ pickedBloodGroup }}</ion-label>
+                  <ion-label>{{ pickedBloodGroup }}</ion-label>
                 </ion-avatar>
               </ion-col>
             </ion-row>
@@ -172,12 +247,12 @@
                 <ion-label class="match-recipient-details">
                   <p>Name: Moses</p>
                   <p>Phone Number: 5612 1920</p>
-                  <p>Location: Qoaling, Maseru Lesotho </p>
+                  <p>Location: Qoaling, Maseru Lesotho</p>
                   <p>Distance: 10 km</p>
                 </ion-label>
               </ion-col>
             </ion-row>
-          </ion-card>   
+          </ion-card>
         </div>
       </ion-content>
     </div>

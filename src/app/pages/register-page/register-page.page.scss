@@ -22,22 +22,26 @@ img {
   color: #8a0303;
   font-weight: 800;
 }
+
 ion-button {
   font-size: 1.2rem;
 }
-.register{
+
+.register {
   color: #8a0303;
   margin-left: 1rem;
- }
- p{
-   color: #000;
- }
+}
+
+p {
+  color: #000;
+}
 
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 form ion-input {
   color: black;
 }

@@ -33,7 +33,6 @@
       name="email"
       id="email"
       [(ngModel)]="userData.email"
-      
     ></ion-input>
 
     <br />
@@ -46,7 +45,6 @@
       id="address"
       name="address"
       [(ngModel)]="userData.address"
-      
     ></ion-input>
 
     <br />
@@ -59,7 +57,6 @@
       name="phoneNumber"
       id="phoneNumber"
       [(ngModel)]="userData.phoneNumber"
-     
     ></ion-input>
 
     <br />
@@ -72,11 +69,15 @@
       name="password"
       id="password"
       [(ngModel)]="userData.password"
-     
     ></ion-input>
 
     <br />
-    <ion-button class="ion-padding ion-xxl mycolor" expand="full" type="submit" (click)="signup()">
+    <ion-button
+      class="ion-padding ion-xxl mycolor"
+      expand="full"
+      type="submit"
+      (click)="signup()"
+    >
       Register
     </ion-button>
   </form>

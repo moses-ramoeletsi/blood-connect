@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { RequestBloodService } from 'src/app/services/request-blood.service';
 
 @Component({
@@ -7,50 +8,48 @@ import { RequestBloodService } from 'src/app/services/request-blood.service';
   styleUrls: ['./request-blood.page.scss'],
 })
 export class RequestBloodPage implements OnInit {
-  bloodRequetsForm ={
-    firstName: "",
-    address: "",
-    phoneNumber: "",
-    bloodGroup: "",
-    transfusionType: ""
-  }
-  bloodGroups:string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
+  bloodRequetsForm = {
+    firstName: '',
+    address: '',
+    phoneNumber: '',
+    bloodGroup: '',
+    transfusionType: '',
+  };
+  bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
-  loaded: boolean = false;
-  showSkeleton: boolean = true;
   selectedBloodGroup: string | null = null;
 
   selectBloodGroup(bloodGroup: string) {
     this.selectedBloodGroup = bloodGroup;
   }
 
-
   toggleNearByDonorContent() {
     this.showNearByDonorContent = !this.showNearByDonorContent;
   }
-constructor(
- public firebaseService: RequestBloodService
-) { 
-  
-}
-  ngOnInit() {
-    setTimeout(() => {
-      this.loaded = true;
-      
-    }, 3000); 
-  }
+  constructor(
+    public firebaseService: RequestBloodService,
+    public alertController: AlertController
+  ) {}
+  ngOnInit() {}
 
   submitForm() {
-    this.firebaseService.addRequest(this.bloodRequetsForm)
-      .then(res => {
-        console.log('Request added successfully!');
-        // You can handle success actions here
+    this.firebaseService
+      .addRequest(this.bloodRequetsForm)
+      .then((res) => {
+        this.showAlert('Blood Request', 'Request added successfully!');
       })
-      .catch(error => {
-        console.error('Error adding request: ', error);
-        // You can handle error actions here
+      .catch((error) => {
+        this.showAlert('Blood Request Error', 'Blood Request not sent!');
       });
   }
 
-
+  showAlert(title: string, message: string) {
+    this.alertController
+      .create({
+        header: title,
+        message: message,
+        buttons: ['OK'],
+      })
+      .then((alert) => alert.present());
+  }
 }

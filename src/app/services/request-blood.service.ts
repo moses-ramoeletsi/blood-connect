@@ -2,14 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RequestBloodService {
-
-  constructor(
-    public firebaseStore: AngularFirestore
-    
-  ) { }
+  constructor(public firebaseStore: AngularFirestore) {}
   addRequest(requestBloodData: any) {
     return this.firebaseStore.collection('requests').add(requestBloodData);
   }
