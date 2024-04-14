@@ -84,8 +84,8 @@
         </div>
 
         <div *ngIf="selectedBloodGroup" class="selected-blood-group">
-          <h2>Your Blood Type Match Donor</h2>
-          <ion-card class="match-blood-group-card">
+          <h2>Blood Type Match Donor</h2>
+          <ion-card class="match-blood-group-card"  *ngFor="let donor of donors | async">
             <ion-row class="ion-align-items-center">
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="avatar">
@@ -96,14 +96,17 @@
               </ion-col>
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
-                  <p>Name: Moses</p>
-                  <p>Phone Number: 5612 1920</p>
-                  <p>Location: Qoaling, Maseru Lesotho</p>
-                  <p>Distance: 10 km</p>
+                  <p><strong>Name:</strong> {{ donor.firstName }}</p>
+                  <p><strong>Trasnfusion Type:</strong> {{ donor.transfusionType }}</p>
+                  <p><strong>Phone Number:</strong> {{ donor.phoneNumber }}</p>
+                  <p><strong>Address:</strong> {{ donor.address }}</p>
                 </ion-label>
               </ion-col>
             </ion-row>
           </ion-card>
+          <ion-text *ngIf="!(donors | async)?.length">
+            No matching donors found.
+          </ion-text>
         </div>
 
         <ion-fab
