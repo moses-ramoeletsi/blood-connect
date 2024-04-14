@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { DonateBloodService } from 'src/app/services/donate-blood.service';
 
 @Component({
@@ -8,6 +10,7 @@ import { DonateBloodService } from 'src/app/services/donate-blood.service';
   styleUrls: ['./donate-blood.page.scss'],
 })
 export class DonateBloodPage implements OnInit {
+  recipients!: Observable<any[]>;
   bloodDonorForm = {
     firstName: '',
     address: '',
@@ -20,9 +23,30 @@ export class DonateBloodPage implements OnInit {
   pickedBloodGroup: string | null = null;
   showMatchingResults: boolean = false;
 
+  constructor(
+    public firebaseService: DonateBloodService,
+    public fireStore: AngularFirestore,
+    public alertController: AlertController
+  ) {}
+
+  ngOnInit() {
+    this.fetchRecipients();
+  }
+
+  fetchRecipients() {
+    if (this.pickedBloodGroup) {
+      this.recipients = this.fireStore.collection('requests', ref =>
+        ref.where('bloodGroup', '==', this.pickedBloodGroup)
+      ).valueChanges();
+    } else {
+      this.recipients = this.fireStore.collection('requests').valueChanges();
+    }
+  }
+
   pickBloodGroup(bloodGroup: string) {
     this.pickedBloodGroup = bloodGroup;
     this.showMatchingResults = true;
+    this.fetchRecipients();
   }
 
   hideMatchingResults() {
@@ -32,11 +56,6 @@ export class DonateBloodPage implements OnInit {
   toggleNearBySeekerContent() {
     this.showNearBySeekerContent = !this.showNearBySeekerContent;
   }
-  constructor(
-    public firebaseService: DonateBloodService,
-    public alertController: AlertController
-  ) {}
-  ngOnInit() {}
 
   submitForm() {
     this.firebaseService
@@ -47,11 +66,12 @@ export class DonateBloodPage implements OnInit {
       .catch((error) => {
         this.showAlert(
           'Donor Post Eroor',
-          'Error occured! \n Donor not successful'
+          'Error occurred! \n Donor not successful'
         );
         console.error('Error adding request: ', error);
       });
   }
+
   showAlert(title: string, message: string) {
     this.alertController
       .create({

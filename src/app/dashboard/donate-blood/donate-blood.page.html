@@ -87,8 +87,11 @@
           *ngIf="pickedBloodGroup && showMatchingResults"
           class="picked-blood-group"
         >
-          <h2>Your Blood Type Match Donor</h2>
-          <ion-card class="match-blood-group-card">
+          <h2>Matching Recipients</h2>
+          <ion-card
+            class="match-blood-group-card"
+            *ngFor="let recipient of recipients | async"
+          >
             <ion-row class="ion-align-items-center">
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="avatar">
@@ -99,33 +102,39 @@
               </ion-col>
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
-                  <p>Name: Moses</p>
-                  <p>Phone Number: 5612 1920</p>
-                  <p>Location: Qoaling, Maseru Lesotho</p>
-                  <p>Distance: 10 km</p>
+                  <p><strong>Name:</strong> {{ recipient.firstName }}</p>
+                  <p><strong>Trasnfusion Type:</strong> {{ recipient.transfusionType }}</p>
+                  <p><strong>Phone Number:</strong> {{ recipient.phoneNumber }}</p>
+                  <p><strong>Address:</strong> {{ recipient.address }}</p>
                 </ion-label>
               </ion-col>
             </ion-row>
           </ion-card>
+          <ion-text *ngIf="!(recipients | async)?.length">
+            No matching recipients found.
+          </ion-text>
         </div>
 
         <div class="matching-blood-group" *ngIf="!showMatchingResults">
           <h2>Available Recipients</h2>
-          <ion-card class="match-blood-group-card">
+          <ion-card
+            class="match-blood-group-card"
+            *ngFor="let recipient of recipients | async"
+          >
             <ion-row class="ion-align-items-center">
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="avatar">
                   <ion-label class="match-blood-group-label"
-                    >{{ pickedBloodGroup }}</ion-label
+                    >{{ recipient.bloodGroup }}</ion-label
                   >
                 </ion-avatar>
               </ion-col>
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
-                  <p>Name: Moses</p>
-                  <p>Phone Number: 5612 1920</p>
-                  <p>Location: Qoaling, Maseru Lesotho</p>
-                  <p>Distance: 10 km</p>
+                  <p><strong>Name:</strong> {{ recipient.firstName }}</p>
+                  <p><strong>Trasnfusion Type:</strong> {{ recipient.transfusionType }}</p>
+                  <p><strong>Phone Number:</strong> {{ recipient.phoneNumber }}</p>
+                  <p><strong>Address:</strong> {{ recipient.address }}</p>
                 </ion-label>
               </ion-col>
             </ion-row>
@@ -202,11 +211,11 @@
                   label-placement="floating"
                   fill="outline"
                 >
-                  <ion-select-option value="donor">Donor</ion-select-option>
-                  <ion-select-option value="hospital"
+                  <ion-select-option value="Donor">Donor</ion-select-option>
+                  <ion-select-option value="Hospital"
                     >Hospital</ion-select-option
                   >
-                  <ion-select-option value="bloodBank"
+                  <ion-select-option value="Blood-Bank"
                     >Blood Bank</ion-select-option
                   > </ion-select
                 ><br />

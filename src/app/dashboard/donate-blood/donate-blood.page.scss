@@ -94,9 +94,18 @@ ion-menu::part(backdrop) {
     width: 100%;
   }
     
-  .picked-blood-group h2 {
-    text-align: center; 
-    margin: 0 auto; 
+  .picked-blood-group {
+    h2 {
+      text-align: center; 
+      margin: 0 auto; 
+    }
+  
+    ion-text {
+      margin-left: 1rem;
+      color: #8a0303; 
+      font-size: 18px;
+      font-weight: 600;
+    }
   }
   .matching-blood-group h2 {
     text-align: center; 
@@ -109,6 +118,7 @@ ion-menu::part(backdrop) {
     border: 1px solid #8a030380;
     max-width: 600px;
     margin: auto;
+    margin-top: 1rem;
     padding: 10px;
   }
   
