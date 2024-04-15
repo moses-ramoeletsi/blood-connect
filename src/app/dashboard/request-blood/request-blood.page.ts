@@ -70,7 +70,7 @@ export class RequestBloodPage implements OnInit {
 
       const userLocation: LatLngTuple = [latitude, longitude];
 
-      this.initializeMap(userLocation); // Initialize map with user's current location
+      this.initializeMap(userLocation);
 
       this.userMarker = marker(userLocation).addTo(this.map);
 
