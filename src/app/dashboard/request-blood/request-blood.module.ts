@@ -8,6 +8,7 @@ import { RequestBloodPageRoutingModule } from './request-blood-routing.module';
 
 import { RequestBloodPage } from './request-blood.page';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +16,7 @@ import { RequestBloodPage } from './request-blood.page';
     IonicModule,
     RequestBloodPageRoutingModule
   ],
-  declarations: [RequestBloodPage]
+  declarations: [RequestBloodPage],
+
 })
 export class RequestBloodPageModule {}

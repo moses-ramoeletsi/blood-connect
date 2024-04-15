@@ -7,6 +7,6 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class RequestBloodService {
   constructor(public firebaseStore: AngularFirestore) {}
   addRequest(requestBloodData: any) {
-    return this.firebaseStore.collection('requests').add(requestBloodData);
+    return this.firebaseStore.collection('recipiecnts').add(requestBloodData);
   }
 }

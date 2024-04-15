@@ -15,8 +15,10 @@
             >
           </ion-item>
           <ion-item>
-            <ion-label [routerLink]="['/donate-blood']">Donate Blood</ion-label>
-          </ion-item>
+            <ion-label [routerLink]="['/donate-blood']"
+              >Donate Blood</ion-label
+            > </ion-item
+          >A
           <ion-item>
             <ion-label [routerLink]="['/blood-banks']">Blood Banks</ion-label>
           </ion-item>
@@ -83,9 +85,15 @@
           </ion-row>
         </div>
 
-        <div *ngIf="selectedBloodGroup && showMatchingResults" class="selected-blood-group">
+        <div
+          *ngIf="selectedBloodGroup && showMatchingResults"
+          class="selected-blood-group"
+        >
           <h2>Blood Type Match Donor</h2>
-          <ion-card class="match-blood-group-card"  *ngFor="let donor of donors | async">
+          <ion-card
+            class="match-blood-group-card"
+            *ngFor="let donor of donors | async"
+          >
             <ion-row class="ion-align-items-center">
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="avatar">
@@ -97,7 +105,10 @@
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
                   <p><strong>Name:</strong> {{ donor.firstName }}</p>
-                  <p><strong>Trasnfusion Type:</strong> {{ donor.transfusionType }}</p>
+                  <p>
+                    <strong>Trasnfusion Type:</strong> {{ donor.transfusionType
+                    }}
+                  </p>
                   <p><strong>Phone Number:</strong> {{ donor.phoneNumber }}</p>
                   <p><strong>Address:</strong> {{ donor.address }}</p>
                 </ion-label>
@@ -126,7 +137,10 @@
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
                   <p><strong>Name:</strong> {{ donor.firstName }}</p>
-                  <p><strong>Trasnfusion Type:</strong> {{ donor.transfusionType }}</p>
+                  <p>
+                    <strong>Trasnfusion Type:</strong> {{ donor.transfusionType
+                    }}
+                  </p>
                   <p><strong>Phone Number:</strong> {{ donor.phoneNumber }}</p>
                   <p><strong>Address:</strong> {{ donor.address }}</p>
                 </ion-label>
@@ -150,7 +164,7 @@
           <ng-template>
             <ion-header>
               <ion-toolbar>
-                <ion-title class="ion-text-center">Request Boold </ion-title>
+                <ion-title class="ion-text-center">Request Blood</ion-title>
                 <ion-buttons slot="end">
                   <ion-button (click)="modal.dismiss()">Cancel</ion-button>
                 </ion-buttons>
@@ -199,10 +213,9 @@
                   <ion-select-option value="A-">A-</ion-select-option>
                   <ion-select-option value="B-">B-</ion-select-option>
                   <ion-select-option value="AB-">AB-</ion-select-option>
-                  <ion-select-option value="O-"
-                    >O-</ion-select-option
-                  > </ion-select
-                ><br />
+                  <ion-select-option value="O-">O-</ion-select-option>
+                </ion-select>
+                <br />
                 <ion-select
                   label="Transfusion Type"
                   name="transfusionType"
@@ -218,10 +231,32 @@
                   >
                   <ion-select-option value="bloodBank"
                     >Blood Bank</ion-select-option
-                  > </ion-select
-                ><br />
-                <!-- <ion-textarea label="Location" name="location" [(ngModel)]="bloodRequetsForm.location" label-placement="floating" fill="outline" placeholder="Your Location"></ion-textarea> <br> -->
-
+                  >
+                </ion-select>
+                <br />
+                <ion-button
+                  class="mycolor"
+                  type="button"
+                  expand="block"
+                  (click)="getLocation()"
+                  >Get Location</ion-button
+                >
+                <div id="map"></div>
+                <link
+                  rel="stylesheet"
+                  href="https://unpkg.com/leaflet/dist/leaflet.css"
+                />
+                <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                <ion-input
+                  label="Location Coordinates"
+                  name="locationCoordinates"
+                  [(ngModel)]="bloodRequetsForm.location"
+                  label-placement="floating"
+                  fill="outline"
+                  placeholder="Latitude, Longitude"
+                  disabled
+                ></ion-input>
+                <br />
                 <ion-button class="mycolor" type="submit" expand="block"
                   >Submit</ion-button
                 >
