@@ -103,9 +103,18 @@
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
                   <p><strong>Name:</strong> {{ recipient.firstName }}</p>
-                  <p><strong>Trasnfusion Type:</strong> {{ recipient.transfusionType }}</p>
-                  <p><strong>Phone Number:</strong> {{ recipient.phoneNumber }}</p>
+                  <p>
+                    <strong>Trasnfusion Type:</strong> {{
+                    recipient.transfusionType }}
+                  </p>
+                  <p>
+                    <strong>Phone Number:</strong> {{ recipient.phoneNumber }}
+                  </p>
                   <p><strong>Address:</strong> {{ recipient.address }}</p>
+                  <p>
+                    <strong>Location Coordinates:</strong> {{ recipient.location
+                    }}
+                  </p>
                 </ion-label>
               </ion-col>
             </ion-row>
@@ -132,9 +141,18 @@
               <ion-col size="12" size-sm="6">
                 <ion-label class="additional-info">
                   <p><strong>Name:</strong> {{ recipient.firstName }}</p>
-                  <p><strong>Trasnfusion Type:</strong> {{ recipient.transfusionType }}</p>
-                  <p><strong>Phone Number:</strong> {{ recipient.phoneNumber }}</p>
+                  <p>
+                    <strong>Trasnfusion Type:</strong> {{
+                    recipient.transfusionType }}
+                  </p>
+                  <p>
+                    <strong>Phone Number:</strong> {{ recipient.phoneNumber }}
+                  </p>
                   <p><strong>Address:</strong> {{ recipient.address }}</p>
+                  <p>
+                    <strong>Location Coordinates:</strong> {{ recipient.location
+                    }}
+                  </p>
                 </ion-label>
               </ion-col>
             </ion-row>
@@ -219,8 +237,28 @@
                     >Blood Bank</ion-select-option
                   > </ion-select
                 ><br />
-                <!-- <ion-textarea label="Location" name="location" [(ngModel)]="bloodDonorForm.location" label-placement="floating" fill="outline" placeholder="Your Location"></ion-textarea> <br> -->
-
+                <ion-button
+                  class="mycolor"
+                  type="button"
+                  expand="block"
+                  (click)="getLocation()"
+                  >Get Location</ion-button
+                >
+                <div id="map"></div>
+                <link
+                  rel="stylesheet"
+                  href="https://unpkg.com/leaflet/dist/leaflet.css"
+                />
+                <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                <ion-input
+                  label="Location Coordinates"
+                  name="locationCoordinates"
+                  [(ngModel)]="bloodDonorForm.location"
+                  label-placement="floating"
+                  fill="outline"
+                  placeholder="Latitude, Longitude"
+                  disabled
+                ></ion-input>
                 <ion-button class="mycolor" type="submit" expand="block"
                   >Submit</ion-button
                 >
