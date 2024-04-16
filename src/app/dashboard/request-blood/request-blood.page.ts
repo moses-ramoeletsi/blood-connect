@@ -4,6 +4,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { Observable, map } from 'rxjs';
 import { RequestBloodService } from 'src/app/services/request-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { GeolocationPosition } from '@capacitor/geolocation';
 import {
   LatLng,
   LatLngTuple,
@@ -14,7 +15,6 @@ import {
   tileLayer,
 } from 'leaflet';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-
 @Component({
   selector: 'app-request-blood',
   templateUrl: './request-blood.page.html',
@@ -106,7 +106,7 @@ export class RequestBloodPage implements OnInit {
         this.updateCoordinatesInput(userLocation);
       })
       .catch((error) => {
-        console.error('Error getting user location:', error);
+        this.showAlert('Error', 'Error Getting user location');
       });
   }
 
@@ -121,6 +121,75 @@ export class RequestBloodPage implements OnInit {
   updateCoordinatesInput(position: LatLngTuple) {
     this.bloodRequetsForm.location = `${position[0]}, ${position[1]}`;
   }
+  async toggleNearByDonorContent() {
+    this.showNearByDonorContent = !this.showNearByDonorContent;
+    try {
+      const userData = await this.firebaseService.fetchUserDataById(
+        this.userId
+      );
+
+      const [latitude, longitude] = userData.location
+        .split(',')
+        .map(parseFloat);
+      this.fetchNearbyDonors(userData.bloodGroup, latitude, longitude);
+    } catch (error) {
+      this.showAlert('Error', 'Fetching user data!');
+    }
+  }
+
+  fetchNearbyDonors(bloodGroup: string, latitude: number, longitude: number) {
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+        const maxDistance = 1.5;
+
+        let nearbyDonorsQuery = this.fireStore.collection('donors', ref =>
+            ref.where('bloodGroup', '==', bloodGroup)
+        );
+
+        nearbyDonorsQuery.valueChanges().subscribe((donors: any[]) => {
+            const donorsWithDistance = donors.map(donor => {
+                const donorLatitude = parseFloat(donor.location.split(',')[0]);
+                const donorLongitude = parseFloat(donor.location.split(',')[1]);
+                const distance = this.calculateDistance(latitude, longitude, donorLatitude, donorLongitude);
+                return { ...donor, distance };
+            });
+            
+            const nearbyDonors = donorsWithDistance.filter(donor => donor.distance <= maxDistance);
+            
+            if (nearbyDonors.length === 0) {
+                this.showAlert('Mathing Error','No matching donors found nearby.');
+            } else {
+                const sortedNearbyDonors = nearbyDonors.sort((a, b) => a.distance - b.distance);
+
+                this.donors = new Observable(observer => {
+                    observer.next(sortedNearbyDonors);
+                    observer.complete();
+                });
+            }
+        });
+    } else {
+        console.error('Invalid user location');
+    }
+}
+
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+    const R = 6371;
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+  }
+
+  deg2rad(deg: number) {
+    return deg * (Math.PI / 180);
+  }
+
   fetchDonors() {
     if (this.selectedBloodGroup) {
       this.donors = this.fireStore
@@ -138,18 +207,6 @@ export class RequestBloodPage implements OnInit {
     this.fetchDonors();
   }
 
-  async toggleNearByDonorContent() {
-    this.showNearByDonorContent = !this.showNearByDonorContent;
-    try {
-      const userData = await this.firebaseService.fetchUserDataById(
-        this.userId
-      );
-      console.log('Logged in user data:', userData);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  }
-
   submitForm() {
     this.firebaseService
       .addRequest(this.bloodRequetsForm)
@@ -158,7 +215,6 @@ export class RequestBloodPage implements OnInit {
       })
       .catch((error) => {
         this.showAlert('Blood Request Error', 'Blood Request not sent!');
-        console.error(error);
       });
   }
 
