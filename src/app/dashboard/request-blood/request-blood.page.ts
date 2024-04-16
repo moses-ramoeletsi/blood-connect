@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController, ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { RequestBloodService } from 'src/app/services/request-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
-import {LatLng, LatLngTuple, LeafletMouseEvent, Map, icon, marker, tileLayer} from 'leaflet';
+import {
+  LatLng,
+  LatLngTuple,
+  LeafletMouseEvent,
+  Map,
+  icon,
+  marker,
+  tileLayer,
+} from 'leaflet';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-request-blood',
@@ -23,7 +32,7 @@ export class RequestBloodPage implements OnInit {
     phoneNumber: '',
     bloodGroup: '',
     transfusionType: '',
-    location:''
+    location: '',
   };
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
@@ -33,25 +42,35 @@ export class RequestBloodPage implements OnInit {
   constructor(
     public firebaseService: RequestBloodService,
     public fireStore: AngularFirestore,
+    private afAuth: AngularFireAuth,
     public alertController: AlertController
   ) {}
+  userId: string = '';
   ngOnInit() {
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        this.userId = user.uid;
+      }
+    });
     this.fetchDonors();
   }
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.getLocation();
   }
-  initializeMap (center: LatLngTuple){
-    if (!this.mapInitialized) { 
+  initializeMap(center: LatLngTuple) {
+    if (!this.mapInitialized) {
       this.map = new Map('map', {
         center: center,
         zoom: 8,
       });
 
-      const tiles = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 20,
-        minZoom: 4,
-      });
+      const tiles = tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+          maxZoom: 20,
+          minZoom: 4,
+        }
+      );
 
       tiles.addTo(this.map);
 
@@ -59,36 +78,38 @@ export class RequestBloodPage implements OnInit {
         this.updateMarkerPosition(event.latlng);
       });
 
-      this.mapInitialized = true; 
+      this.mapInitialized = true;
     }
-
   }
   getLocation() {
-    Geolocation['getCurrentPosition']().then((position: any) => {
-      const geoPosition: GeolocationPosition = position as GeolocationPosition;
-      const { latitude, longitude } = geoPosition.coords;
+    Geolocation['getCurrentPosition']()
+      .then((position: any) => {
+        const geoPosition: GeolocationPosition =
+          position as GeolocationPosition;
+        const { latitude, longitude } = geoPosition.coords;
 
-      const userLocation: LatLngTuple = [latitude, longitude];
+        const userLocation: LatLngTuple = [latitude, longitude];
 
-      this.initializeMap(userLocation);
+        this.initializeMap(userLocation);
 
-      this.userMarker = marker(userLocation).addTo(this.map);
+        this.userMarker = marker(userLocation).addTo(this.map);
 
-      const customIcon = icon({
-        iconUrl: 'assets/images/pin.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
+        const customIcon = icon({
+          iconUrl: 'assets/images/pin.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+        });
+
+        this.userMarker.setIcon(customIcon);
+
+        this.updateCoordinatesInput(userLocation);
+      })
+      .catch((error) => {
+        console.error('Error getting user location:', error);
       });
-
-      this.userMarker.setIcon(customIcon);
-
-      this.updateCoordinatesInput(userLocation);
-    }).catch((error) => {
-      console.error('Error getting user location:', error);
-    });
   }
-  
+
   updateMarkerPosition(position: LatLng) {
     if (this.userMarker) {
       const { lat, lng } = position;
@@ -102,9 +123,11 @@ export class RequestBloodPage implements OnInit {
   }
   fetchDonors() {
     if (this.selectedBloodGroup) {
-      this.donors = this.fireStore.collection('donors', ref =>
-        ref.where('bloodGroup', '==', this.selectedBloodGroup)
-      ).valueChanges();
+      this.donors = this.fireStore
+        .collection('donors', (ref) =>
+          ref.where('bloodGroup', '==', this.selectedBloodGroup)
+        )
+        .valueChanges();
     } else {
       this.donors = this.fireStore.collection('donors').valueChanges();
     }
@@ -115,20 +138,27 @@ export class RequestBloodPage implements OnInit {
     this.fetchDonors();
   }
 
-
-
-  toggleNearByDonorContent() {
+  async toggleNearByDonorContent() {
     this.showNearByDonorContent = !this.showNearByDonorContent;
+    try {
+      const userData = await this.firebaseService.fetchUserDataById(
+        this.userId
+      );
+      console.log('Logged in user data:', userData);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
   }
 
   submitForm() {
     this.firebaseService
       .addRequest(this.bloodRequetsForm)
-      .then((res) => {
+      .then(() => {
         this.showAlert('Blood Request', 'Request added successfully!');
       })
       .catch((error) => {
         this.showAlert('Blood Request Error', 'Blood Request not sent!');
+        console.error(error);
       });
   }
 
