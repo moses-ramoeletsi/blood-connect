@@ -13,6 +13,7 @@ import {
   marker,
   tileLayer,
 } from 'leaflet';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-donate-blood',
@@ -33,6 +34,7 @@ export class DonateBloodPage implements OnInit {
     transfusionType: '',
     location: '',
   };
+  userId: string = '';
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearBySeekerContent: boolean = false;
   pickedBloodGroup: string | null = null;
@@ -41,10 +43,16 @@ export class DonateBloodPage implements OnInit {
   constructor(
     public firebaseService: DonateBloodService,
     public fireStore: AngularFirestore,
+    private afAuth: AngularFireAuth,
     public alertController: AlertController
   ) {}
 
   ngOnInit() {
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        this.userId = user.uid;
+      }
+    });
     this.fetchRecipients();
   }
 
@@ -114,15 +122,93 @@ export class DonateBloodPage implements OnInit {
   updateCoordinatesInput(position: LatLngTuple) {
     this.bloodDonorForm.location = `${position[0]}, ${position[1]}`;
   }
+  async toggleNearBySeekerContent() {
+    this.showNearBySeekerContent = !this.showNearBySeekerContent;
+    try {
+      const userData = await this.firebaseService.fetchUserDataById(
+        this.userId
+      );
+
+      const [latitude, longitude] = userData.location
+        .split(',')
+        .map(parseFloat);
+      this.fetchNearbySeekers(userData.bloodGroup, latitude, longitude);
+    } catch (error) {
+      this.showAlert('Error', 'Fetching user data!');
+    }
+  }
+  fetchNearbySeekers(bloodGroup: string, latitude: number, longitude: number) {
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+      const maxDistance = 1.5;
+
+      let nearbySeekersQuery = this.fireStore.collection('recipients', (ref) =>
+        ref.where('bloodGroup', '==', bloodGroup)
+      );
+
+      nearbySeekersQuery.valueChanges().subscribe((recipients: any[]) => {
+        const recipientsWithDistance = recipients.map((recipient) => {
+          const recipientLatitude = parseFloat(
+            recipient.location.split(',')[0]
+          );
+          const recipientLongitude = parseFloat(
+            recipient.location.split(',')[1]
+          );
+          const distance = this.calculateDistance(
+            latitude,
+            longitude,
+            recipientLatitude,
+            recipientLongitude
+          );
+          return { ...recipient, distance };
+        });
+
+        const nearbyrecipients = recipientsWithDistance.filter(
+          (recipient) => recipient.distance <= maxDistance
+        );
+
+        if (nearbyrecipients.length === 0) {
+          this.showAlert('Mathing Error', 'No matching donors found nearby.');
+        } else {
+          const sortedNearbyrecipients = nearbyrecipients.sort(
+            (a, b) => a.distance - b.distance
+          );
+
+          this.recipients = new Observable((observer) => {
+            observer.next(sortedNearbyrecipients);
+            observer.complete();
+          });
+        }
+      });
+    } else {
+      console.error('Invalid user location');
+    }
+  }
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+    const R = 6371;
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+  }
+  deg2rad(deg: number) {
+    return deg * (Math.PI / 180);
+  }
   fetchRecipients() {
     if (this.pickedBloodGroup) {
       this.recipients = this.fireStore
-        .collection('recipiecnts', (ref) =>
+        .collection('recipients', (ref) =>
           ref.where('bloodGroup', '==', this.pickedBloodGroup)
         )
         .valueChanges();
     } else {
-      this.recipients = this.fireStore.collection('recipiecnts').valueChanges();
+      this.recipients = this.fireStore.collection('recipients').valueChanges();
     }
   }
 
@@ -134,10 +220,6 @@ export class DonateBloodPage implements OnInit {
 
   hideMatchingResults() {
     this.showMatchingResults = false;
-  }
-
-  toggleNearBySeekerContent() {
-    this.showNearBySeekerContent = !this.showNearBySeekerContent;
   }
 
   submitForm() {
