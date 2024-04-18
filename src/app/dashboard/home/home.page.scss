@@ -155,3 +155,11 @@ ion-grid ion-card-content {
   transform: translateY(-5px);
   transition: transform 0.3s ease;
 }
+.mycolor{
+  --background: var(--ion-color-btn);
+}
+.logout-grid {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

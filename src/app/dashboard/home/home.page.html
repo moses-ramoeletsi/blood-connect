@@ -21,6 +21,13 @@
             <ion-label [routerLink]="['/feedback']">FeedBack</ion-label>
           </ion-item>
         </ion-list>
+        <ion-grid class="logout-grid">
+          <ion-row justify-content-center>
+            <ion-col size="auto">
+              <ion-button class="mycolor" (click)="logout()">Logout</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>      
       </ion-content>
     </ion-menu>
     <div class="ion-page" id="main-content">

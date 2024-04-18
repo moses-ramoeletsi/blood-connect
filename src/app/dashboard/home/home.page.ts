@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable, Subscription, filter, interval, map, switchMap } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { UserDetails } from './../../shared/userDetails';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,7 @@ currentTipIndex: number = 0;
   constructor(
     public fireServices: UserService,
     public afAuth: AngularFireAuth,
+    private router: Router
   ) {
     this.user = this.afAuth.authState.pipe(
       filter(user => user !== null),
@@ -62,6 +64,9 @@ currentTipIndex: number = 0;
 
   showNextTip() {
     this.currentTipIndex = (this.currentTipIndex + 1) % this.tips.length;
+  }
+  logout(){
+    this.router.navigate(['/login-page']);
   }
   }
 
