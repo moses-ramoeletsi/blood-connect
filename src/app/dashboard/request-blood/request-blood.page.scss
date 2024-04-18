@@ -270,6 +270,11 @@ ion-modal ion-content ion-button {
   flex-direction: column;
   align-items: center;
 }
+.connect-button {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  --background: var(--ion-color-btn);
+}
 
 @media screen and (min-width: 600px) {
   .match-donor-details {

@@ -9,7 +9,8 @@ import { BloodRequestDetails } from '../shared/requestBloodDetails';
 export class RequestBloodService {
   constructor(
     public firebaseStore: AngularFirestore,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+
   ) {}
 
   async addRequest(requestBloodData: any) {
@@ -24,6 +25,7 @@ export class RequestBloodService {
       return Promise.reject('User is not logged in.');
     }
   }
+
   async fetchUserDataById(
     userId: string
   ): Promise<{ bloodGroup: string; location: string }> {
@@ -43,4 +45,31 @@ export class RequestBloodService {
       throw error;
     }
   }
+
+  async fetchRecipientDataById(userId: string): Promise<any> {
+    try {
+      const doc = await this.firebaseStore.collection('recipients').doc(userId).get().toPromise();
+      if (doc && doc.exists) {
+        return doc.data();
+      } else {
+        throw new Error('User data not found');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async sentRequest(requestForBlood: any) {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      const userId = user.uid;
+      return this.firebaseStore
+        .collection('requestBlood')
+        .doc(userId)
+        .set(requestForBlood, { merge: true });
+    } else {
+      return Promise.reject('User is not logged in.');
+    }
+  }
+  
 }

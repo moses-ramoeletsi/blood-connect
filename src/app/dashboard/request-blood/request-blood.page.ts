@@ -33,6 +33,7 @@ export class RequestBloodPage implements OnInit {
     bloodGroup: '',
     transfusionType: '',
     location: '',
+    message: '',
   };
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
@@ -50,10 +51,27 @@ export class RequestBloodPage implements OnInit {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.userId = user.uid;
+        this.fetchUserData(this.userId);
       }
     });
     this.fetchDonors();
   }
+
+  fetchUserData(userId: string) {
+  this.firebaseService.fetchRecipientDataById(userId)
+    .then((userData) => {
+      console.log(userData);
+      this.bloodRequetsForm.firstName = userData.firstName;
+      this.bloodRequetsForm.phoneNumber = userData.phoneNumber;
+      this.bloodRequetsForm.address = userData.address;
+      this.bloodRequetsForm.bloodGroup = userData.bloodGroup;
+      this.bloodRequetsForm.location = userData.location;
+    })
+    .catch((error) => {
+      console.error('Error fetching user data:', error);
+    });
+}
+
   ngAfterViewInit() {
     this.getLocation();
   }
@@ -212,6 +230,16 @@ export class RequestBloodPage implements OnInit {
       .addRequest(this.bloodRequetsForm)
       .then(() => {
         this.showAlert('Blood Request', 'Request added successfully!');
+      })
+      .catch((error) => {
+        this.showAlert('Blood Request Error', 'Blood Request not sent!');
+      });
+  }
+  sentRequestForm() {
+    this.firebaseService
+      .sentRequest(this.bloodRequetsForm)
+      .then(() => {
+        this.showAlert('Blood Request', 'Request send successfully!');
       })
       .catch((error) => {
         this.showAlert('Blood Request Error', 'Blood Request not sent!');

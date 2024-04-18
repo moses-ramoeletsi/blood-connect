@@ -18,7 +18,7 @@
             <ion-label [routerLink]="['/donate-blood']"
               >Donate Blood</ion-label
             > </ion-item
-          >A
+          >
           <ion-item>
             <ion-label [routerLink]="['/blood-banks']">Blood Banks</ion-label>
           </ion-item>
@@ -305,6 +305,79 @@
                     <strong>Location Coordinates:</strong> {{ donor.location }}
                   </p>
                 </ion-label>
+                <ion-button class="connect-button" id="open-connect-modal"> Connect</ion-button>
+                <ion-modal [keepContentsMounted]="true" trigger="open-connect-modal" #modal>
+                  <ng-template>
+                    <ion-header>
+                      <ion-toolbar>
+                        <ion-title class="ion-text-center">Connect To Donor</ion-title>
+                        <ion-buttons slot="end">
+                          <ion-button (click)="modal.dismiss()">Cancel</ion-button>
+                        </ion-buttons>
+                      </ion-toolbar>
+                    </ion-header>
+                    <ion-content class="ion-padding">
+                      <form class="connect-form" (ngSubmit)="sentRequestForm()">
+                        <ion-input
+                          label="Name"
+                          name="name"
+                          [(ngModel)]="bloodRequetsForm.firstName"
+                          label-placement="floating"
+                          fill="outline"
+                          placeholder="Enter Name"
+                        ></ion-input>
+                        <br />
+                        <ion-input
+                          label="Phone Number"
+                          name="phoneNumber"
+                          [(ngModel)]="bloodRequetsForm.phoneNumber"
+                          label-placement="floating"
+                          fill="outline"
+                          placeholder="Enter Phone Number"
+                        ></ion-input>
+                        <br />
+                        <ion-input
+                          label="Address"
+                          name="address"
+                          [(ngModel)]="bloodRequetsForm.address"
+                          label-placement="floating"
+                          fill="outline"
+                        ></ion-input>
+                        <br />
+                        <ion-input
+                          label="Blood Group"
+                          name="bloodGroup"
+                          [(ngModel)]="bloodRequetsForm.bloodGroup"
+                          label-placement="floating"
+                          fill="outline"
+                        >
+                        </ion-input>
+                        <br />
+                        <ion-input
+                          label="Location Coordinates"
+                          name="locationCoordinates"
+                          [(ngModel)]="bloodRequetsForm.location"
+                          label-placement="floating"
+                          fill="outline"
+                          placeholder="Latitude, Longitude"
+                        ></ion-input>
+                        <br />
+                        <ion-textarea
+                          label="Message"
+                          name="message"
+                          label-placement="floating"
+                          fill="outline"
+                          [(ngModel)]="bloodRequetsForm.message"
+                          placeholder="Your message goes here..."
+                        ></ion-textarea> 
+                        <br/>        
+                        <ion-button class="mycolor" type="submit" expand="block"
+                          >Make Request</ion-button
+                        >
+                      </form>
+                    </ion-content>
+                  </ng-template>
+                </ion-modal>
               </ion-col>
             </ion-row>
           </ion-card>

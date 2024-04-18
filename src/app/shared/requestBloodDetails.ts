@@ -5,4 +5,5 @@ export interface BloodRequestDetails{
     bloodGroup: string;
     transfusionType: string;
     location:string;
+    message:string;
 }
