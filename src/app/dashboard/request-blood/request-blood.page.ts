@@ -34,6 +34,7 @@ export class RequestBloodPage implements OnInit {
     transfusionType: '',
     location: '',
     message: '',
+    status:''
   };
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
@@ -236,6 +237,7 @@ export class RequestBloodPage implements OnInit {
       });
   }
   sentRequestForm() {
+    this.bloodRequetsForm.status = 'pending';
     this.firebaseService
       .sentRequest(this.bloodRequetsForm)
       .then(() => {
