@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { DonateBloodService } from 'src/app/services/donate-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
 import {
@@ -14,13 +14,13 @@ import {
   tileLayer,
 } from 'leaflet';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-
 @Component({
   selector: 'app-donate-blood',
   templateUrl: './donate-blood.page.html',
   styleUrls: ['./donate-blood.page.scss'],
 })
 export class DonateBloodPage implements OnInit {
+
   recipients!: Observable<any[]>;
   map: any;
   marker: any;
@@ -40,6 +40,9 @@ export class DonateBloodPage implements OnInit {
   pickedBloodGroup: string | null = null;
   showMatchingResults: boolean = false;
 
+  donorId: string = ''; 
+  requests: any[] = [];
+
   constructor(
     public firebaseService: DonateBloodService,
     public fireStore: AngularFirestore,
@@ -51,11 +54,43 @@ export class DonateBloodPage implements OnInit {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.userId = user.uid;
+        this.getReguestsForCurrentUser(); 
       }
     });
     this.fetchRecipients();
   }
+  getReguestsForCurrentUser(){
+    this.fireStore.collection('requestBlood', ref =>
+    ref.where('donorId', '==', this.userId)
+  ).valueChanges().subscribe((requests: any[]) => {
+    this.requests = requests;
+  });
+    
+  }
 
+  changeStatus(request: any, newStatus: string) {
+    request.status = newStatus;
+    this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', request.donorId))
+      .snapshotChanges()
+      .pipe(take(1))
+      .subscribe(snapshot => {
+        if (snapshot.length > 0) {
+          const docId = snapshot[0].payload.doc.id;
+          this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
+            .then(() => {
+              this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
+            })
+            .catch((error) => {
+              this.showAlert('Blood Request Error', 'Error updating status!');
+            });
+          } else {
+            this.showAlert('Id Not Found', request.donorId);
+        }
+      });
+  }
+  
+
+ 
   ngAfterViewInit() {
     this.getLocation();
   }
@@ -233,7 +268,6 @@ export class DonateBloodPage implements OnInit {
           'Donor Post Eroor',
           'Error occurred! \n Donor not successful'
         );
-        console.error('Error adding request: ', error);
       });
   }
 

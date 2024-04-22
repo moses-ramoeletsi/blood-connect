@@ -159,6 +159,30 @@
           </ion-card>
         </div>
 
+        <ion-content class="ion-padding">
+          <h2>Incoming Requests</h2>
+          <ion-card *ngFor="let request of requests">
+            <ion-card-header>
+              <ion-card-title>{{ request.bloodGroup }}</ion-card-title>
+            </ion-card-header>
+        
+            <ion-card-content>
+              <p><strong>Blood Group:</strong>{{ request.firstName }}</p>
+              <p><strong>Address:</strong> {{ request.address }}</p>
+              <p><strong>Location:</strong> {{ request.location }}</p>
+              <p><strong>Message:</strong> {{ request.message }}</p>
+              <ion-button (click)="changeStatus(request, 'Approved')">Approve</ion-button>
+              <ion-button (click)="changeStatus(request, 'Rejected')">Reject</ion-button>
+            </ion-card-content>
+          </ion-card>
+        
+          <div *ngIf="requests.length === 0" style="color: red;">
+            No matching requests found.
+          </div>
+        </ion-content>
+        
+        
+
         <ion-fab slot="fixed" vertical="bottom" horizontal="end">
           <ion-fab-button id="open-modal">
             <ion-icon name="add"></ion-icon>
