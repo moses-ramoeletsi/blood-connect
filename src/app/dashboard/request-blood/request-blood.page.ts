@@ -34,8 +34,8 @@ export class RequestBloodPage implements OnInit {
     transfusionType: '',
     location: '',
     message: '',
-    status:'',
-    donorId: ''
+    status: '',
+    donorId: '',
   };
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
@@ -60,19 +60,19 @@ export class RequestBloodPage implements OnInit {
   }
 
   fetchUserData(userId: string) {
-  this.firebaseService.fetchRecipientDataById(userId)
-    .then((userData) => {
-      console.log(userData);
-      this.bloodRequetsForm.firstName = userData.firstName;
-      this.bloodRequetsForm.phoneNumber = userData.phoneNumber;
-      this.bloodRequetsForm.address = userData.address;
-      this.bloodRequetsForm.bloodGroup = userData.bloodGroup;
-      this.bloodRequetsForm.location = userData.location;
-    })
-    .catch((error) => {
-      console.error('Error fetching user data:', error);
-    });
-}
+    this.firebaseService
+      .fetchRecipientDataById(userId)
+      .then((userData) => {
+        this.bloodRequetsForm.firstName = userData.firstName;
+        this.bloodRequetsForm.phoneNumber = userData.phoneNumber;
+        this.bloodRequetsForm.address = userData.address;
+        this.bloodRequetsForm.bloodGroup = userData.bloodGroup;
+        this.bloodRequetsForm.location = userData.location;
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
+  }
 
   ngAfterViewInit() {
     this.getLocation();
@@ -142,53 +142,65 @@ export class RequestBloodPage implements OnInit {
     this.bloodRequetsForm.location = `${position[0]}, ${position[1]}`;
   }
 
-async toggleNearByDonorContent() {
-  this.showNearByDonorContent = !this.showNearByDonorContent;
-  try {
-    const userData = await this.firebaseService.fetchUserDataById(this.userId);
+  async toggleNearByDonorContent() {
+    this.showNearByDonorContent = !this.showNearByDonorContent;
+    try {
+      const userData = await this.firebaseService.fetchUserDataById(
+        this.userId
+      );
 
-    const [latitude, longitude] = userData.location.split(',').map(parseFloat);
-    this.fetchNearbyDonors(userData.bloodGroup, latitude, longitude);
-  } catch (error) {
-    this.showAlert('Error', 'Fetching user data!');
+      const [latitude, longitude] = userData.location
+        .split(',')
+        .map(parseFloat);
+      this.fetchNearbyDonors(userData.bloodGroup, latitude, longitude);
+    } catch (error) {
+      this.showAlert('Error', 'Fetching user data!');
+    }
   }
-}
 
-fetchNearbyDonors(bloodGroup: string, latitude: number, longitude: number) {
-  if (!isNaN(latitude) && !isNaN(longitude)) {
-    const maxDistance = 1.5;
+  fetchNearbyDonors(bloodGroup: string, latitude: number, longitude: number) {
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+      const maxDistance = 1.5;
 
-    let nearbyDonorsQuery = this.fireStore.collection('donors', ref =>
-      ref.where('bloodGroup', '==', bloodGroup)
-    );
+      let nearbyDonorsQuery = this.fireStore.collection('donors', (ref) =>
+        ref.where('bloodGroup', '==', bloodGroup)
+      );
 
-    nearbyDonorsQuery.snapshotChanges().subscribe((donorSnapshots: any[]) => {
-      const nearbyDonors = donorSnapshots.map((doc: any) => {
-        const donorData = doc.payload.doc.data();
-        const donorId = doc.payload.doc.id;
-        const donorLatitude = parseFloat(donorData.location.split(',')[0]);
-        const donorLongitude = parseFloat(donorData.location.split(',')[1]);
-        const distance = this.calculateDistance(latitude, longitude, donorLatitude, donorLongitude);
-        return { id: donorId, ...donorData, distance };
-      });
-
-      const filteredDonors = nearbyDonors.filter(donor => donor.distance <= maxDistance);
-
-      if (filteredDonors.length === 0) {
-        this.showAlert('Matching Error', 'No matching donors found nearby.');
-      } else {
-        const sortedNearbyDonors = filteredDonors.sort((a, b) => a.distance - b.distance);
-        this.donors = new Observable(observer => {
-          observer.next(sortedNearbyDonors);
-          observer.complete();
+      nearbyDonorsQuery.snapshotChanges().subscribe((donorSnapshots: any[]) => {
+        const nearbyDonors = donorSnapshots.map((doc: any) => {
+          const donorData = doc.payload.doc.data();
+          const donorId = doc.payload.doc.id;
+          const donorLatitude = parseFloat(donorData.location.split(',')[0]);
+          const donorLongitude = parseFloat(donorData.location.split(',')[1]);
+          const distance = this.calculateDistance(
+            latitude,
+            longitude,
+            donorLatitude,
+            donorLongitude
+          );
+          return { id: donorId, ...donorData, distance };
         });
-      }
-    });
-  } else {
-    console.error('Invalid user location');
-  }
-}
 
+        const filteredDonors = nearbyDonors.filter(
+          (donor) => donor.distance <= maxDistance
+        );
+
+        if (filteredDonors.length === 0) {
+          this.showAlert('Matching Error', 'No matching donors found nearby.');
+        } else {
+          const sortedNearbyDonors = filteredDonors.sort(
+            (a, b) => a.distance - b.distance
+          );
+          this.donors = new Observable((observer) => {
+            observer.next(sortedNearbyDonors);
+            observer.complete();
+          });
+        }
+      });
+    } else {
+      console.error('Invalid user location');
+    }
+  }
 
   calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
     const R = 6371;

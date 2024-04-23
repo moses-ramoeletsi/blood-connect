@@ -15,10 +15,8 @@
             >
           </ion-item>
           <ion-item>
-            <ion-label [routerLink]="['/donate-blood']"
-              >Donate Blood</ion-label
-            > </ion-item
-          >
+            <ion-label [routerLink]="['/donate-blood']">Donate Blood</ion-label>
+          </ion-item>
           <ion-item>
             <ion-label [routerLink]="['/blood-banks']">Blood Banks</ion-label>
           </ion-item>
@@ -46,10 +44,16 @@
       <ion-content class="ion-padding" *ngIf="!showNearByDonorContent">
         <ion-row>
           <ion-col size-md="12" class="ion-align-items-center">
-            <div class="ion-text-start ion-text-center-md">
+            <div
+              class="ion-text-center-md"
+              style="display: flex; justify-content: space-between"
+            >
               <ion-buttons routerLink="/home" style="color: black">
                 <ion-icon name="chevron-back-outline"></ion-icon>
                 <ion-label>Back</ion-label>
+              </ion-buttons>
+              <ion-buttons routerLink="/recipient-request">
+                <ion-label class="label-color"> View Requests</ion-label>
               </ion-buttons>
             </div>
             <div class="ion-text-end ion-text-center-md">
@@ -283,7 +287,10 @@
         </ion-buttons>
         <div class="donors">
           <h2>Near By Donors</h2>
-          <ion-card class="match-donor-card" *ngFor="let donor of donors | async">
+          <ion-card
+            class="match-donor-card"
+            *ngFor="let donor of donors | async"
+          >
             <ion-row>
               <ion-col size="12" size-sm="6">
                 <ion-avatar class="match-donor-avatar">
@@ -305,19 +312,32 @@
                     <strong>Location Coordinates:</strong> {{ donor.location }}
                   </p>
                 </ion-label>
-                <ion-button class="connect-button" id="open-connect-modal"> Connect</ion-button>
-                <ion-modal [keepContentsMounted]="true" trigger="open-connect-modal" #modal>
+                <ion-button class="connect-button" id="open-connect-modal">
+                  Connect</ion-button
+                >
+                <ion-modal
+                  [keepContentsMounted]="true"
+                  trigger="open-connect-modal"
+                  #modal
+                >
                   <ng-template>
                     <ion-header>
                       <ion-toolbar>
-                        <ion-title class="ion-text-center">Connect To Donor</ion-title>
+                        <ion-title class="ion-text-center"
+                          >Connect To Donor</ion-title
+                        >
                         <ion-buttons slot="end">
-                          <ion-button (click)="modal.dismiss()">Cancel</ion-button>
+                          <ion-button (click)="modal.dismiss()"
+                            >Cancel</ion-button
+                          >
                         </ion-buttons>
                       </ion-toolbar>
                     </ion-header>
                     <ion-content class="ion-padding">
-                      <form class="connect-form" (ngSubmit)="sentRequestForm()">
+                      <form
+                        class="connect-form"
+                        (ngSubmit)="sentRequestForm(donor.id)"
+                      >
                         <ion-input
                           label="Name"
                           name="name"
@@ -369,8 +389,8 @@
                           fill="outline"
                           [(ngModel)]="bloodRequetsForm.message"
                           placeholder="Your message goes here..."
-                        ></ion-textarea> 
-                        <br/>        
+                        ></ion-textarea>
+                        <br />
                         <ion-button class="mycolor" type="submit" expand="block"
                           >Make Request</ion-button
                         >
