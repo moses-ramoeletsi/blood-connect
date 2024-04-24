@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AlertController, ModalController } from '@ionic/angular';
-import { Observable, map } from 'rxjs';
+import { AlertController} from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { RequestBloodService } from 'src/app/services/request-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { GeolocationPosition } from '@capacitor/geolocation';
@@ -15,6 +15,8 @@ import {
   tileLayer,
 } from 'leaflet';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-request-blood',
   templateUrl: './request-blood.page.html',
@@ -26,7 +28,7 @@ export class RequestBloodPage implements OnInit {
   mapInitialized: boolean = false;
   userMarker: any;
   donors!: Observable<any[]>;
-  bloodRequetsForm = {
+  bloodRequestForm = {
     firstName: '',
     address: '',
     phoneNumber: '',
@@ -63,11 +65,11 @@ export class RequestBloodPage implements OnInit {
     this.firebaseService
       .fetchRecipientDataById(userId)
       .then((userData) => {
-        this.bloodRequetsForm.firstName = userData.firstName;
-        this.bloodRequetsForm.phoneNumber = userData.phoneNumber;
-        this.bloodRequetsForm.address = userData.address;
-        this.bloodRequetsForm.bloodGroup = userData.bloodGroup;
-        this.bloodRequetsForm.location = userData.location;
+        this.bloodRequestForm.firstName = userData.firstName;
+        this.bloodRequestForm.phoneNumber = userData.phoneNumber;
+        this.bloodRequestForm.address = userData.address;
+        this.bloodRequestForm.bloodGroup = userData.bloodGroup;
+        this.bloodRequestForm.location = userData.location;
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
@@ -139,7 +141,7 @@ export class RequestBloodPage implements OnInit {
     }
   }
   updateCoordinatesInput(position: LatLngTuple) {
-    this.bloodRequetsForm.location = `${position[0]}, ${position[1]}`;
+    this.bloodRequestForm.location = `${position[0]}, ${position[1]}`;
   }
 
   async toggleNearByDonorContent() {
@@ -240,7 +242,7 @@ export class RequestBloodPage implements OnInit {
 
   submitForm() {
     this.firebaseService
-      .addRequest(this.bloodRequetsForm)
+      .addRequest(this.bloodRequestForm)
       .then(() => {
         this.showAlert('Blood Request', 'Request added successfully!');
       })
@@ -249,10 +251,10 @@ export class RequestBloodPage implements OnInit {
       });
   }
   sentRequestForm(donorId: string) {
-    this.bloodRequetsForm.status = 'pending';
-    this.bloodRequetsForm.donorId = donorId;
+    this.bloodRequestForm.status = 'pending';
+    this.bloodRequestForm.donorId = donorId;
     this.firebaseService
-      .sentRequest(this.bloodRequetsForm)
+      .sentRequest(this.bloodRequestForm)
       .then(() => {
         this.showAlert('Blood Request', 'Request send successfully!');
       })
