@@ -129,12 +129,12 @@ ion-menu::part(backdrop) {
 
   .requestInfo ion-button {
     --background: var(--ion-color-btn);
-    --ion-color: #fff; /* Set the text color of the button */
-    margin-top: 10px; /* Add space between buttons and other elements */
+    --ion-color: #fff; 
+    margin-top: 10px; 
   }
   
   .requestInfo .button-container {
     display: flex;
-    justify-content: center; /* Center-align buttons horizontally */
-    width: 100%; /* Ensure buttons take up full width */
+    justify-content: center; 
+    width: 100%; 
   }
