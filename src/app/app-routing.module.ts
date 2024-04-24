@@ -32,6 +32,14 @@ const routes: Routes = [
     path: 'feedback',
     loadChildren: () => import('./dashboard/feedback/feedback.module').then( m => m.FeedbackPageModule)
   },
+  {
+    path: 'recipient-request',
+    loadChildren: () => import('./dashboard/recipient-request/recipient-request.module').then( m => m.RecipientRequestPageModule)
+  },
+  {
+    path: 'donation-request',
+    loadChildren: () => import('./dashboard/donation-request/donation-request.module').then( m => m.DonationRequestPageModule)
+  },
 ];
 
 @NgModule({
