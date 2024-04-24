@@ -1,0 +1,140 @@
+ion-menu::part(backdrop) {
+    background-color: rgba(138, 3, 3, 0.5)
+  }
+  
+  ion-menu::part(container) {
+    border-radius: 0 20px 20px 0;
+    width: 55%;
+    box-shadow: 10px 0px 16px rgba(141, 33, 33, 0.18);
+  }
+  
+  ion-content {
+    --ion-background-color: #ffff;
+    --ion-padding-top: 10px;
+    --ion-padding-bottom: 10px;
+  }
+  ion-content h3 {
+    color: black;
+    margin-left: 1.5rem;
+  }
+  
+  .myMenu {
+    --background: var(--ion-color-menu);
+    margin-top: 0;
+  }
+  
+  .menuContent {
+    --background: var(--ion-color-menu);
+    height: 125px;
+    border-bottom-left-radius: 90%;
+    border-bottom-right-radius: 90%;
+    margin-bottom: 0;
+  }
+  
+  img {
+    height: 100px;
+    width: auto;
+    margin: auto;
+    display: block;
+  }
+  
+  ion-img {
+    height: 45px;
+    width: 45px;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  .mycolor{
+    --background: var(--ion-color-btn);
+  }
+  .logout-grid {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  .donorInfo {
+    background-color: #fffffff5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.85rem;
+    border: 1px solid #8a030380;
+    margin: auto;
+    margin-top: 1rem;
+  }
+  .donorInfo ion-card-title {
+    color: black;
+  }
+  .donorInfo ion-list,
+  .donorInfo ion-item {
+    --background: transparent;
+  }
+  ion-item ion-label{
+    color: black;
+  }
+
+  h2 {
+    color: black;
+  }
+  .request-card {
+    background-color: #fffffff5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #8a030380;
+    max-width: 600px;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 10px;
+  }
+  
+  .avatar {
+    border: 2px solid #8a0303;
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .blood-group {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    color: #000;
+  }
+  .status {
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .requestInfo {
+    color: black;
+  }
+  
+  .requestInfo {
+    padding: 8px;
+}
+.requestInfo p strong {
+    margin-right: 10px;
+}
+.requestInfo p {
+    margin-bottom: 8px; 
+    margin-left: 2rem; 
+  }
+  
+  .requestInfo ion-button {
+    margin-right: 8px; 
+  }
+
+  .requestInfo ion-button {
+    --background: var(--ion-color-btn);
+    --ion-color: #fff; 
+    margin-top: 10px; 
+  }
+  
+  .requestInfo .button-container {
+    display: flex;
+    justify-content: center; 
+    width: 100%; 
+  }
