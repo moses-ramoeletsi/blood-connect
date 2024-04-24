@@ -53,4 +53,26 @@
   <div *ngIf="requests.length === 0" style="color: red">
     No matching requests found.
   </div>
+
+  <ion-content class="ion-padding">
+    <h2>Incoming Requests</h2>
+    <ion-card *ngFor="let donationRequest of donationRequests">
+      <ion-card-header>
+        <ion-card-title>{{ donationRequest.bloodGroup }}</ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+        <p><strong>Blood Group:</strong>{{ donationRequest.firstName }}</p>
+        <p><strong>Address:</strong> {{ donationRequest.address }}</p>
+        <p><strong>Location:</strong> {{ donationRequest.location }}</p>
+        <p><strong>Message:</strong> {{ donationRequest.message }}</p>
+        <!-- <ion-button (click)="changeStatus(request, 'Approved')">Approve</ion-button>
+        <ion-button (click)="changeStatus(request, 'Rejected')">Reject</ion-button> -->
+      </ion-card-content>
+    </ion-card>
+  
+    <div *ngIf="requests.length === 0" style="color: red;">
+      No matching requests found.
+    </div>
+  </ion-content>
 </ion-content>

@@ -37,6 +37,7 @@ export class RequestBloodPage implements OnInit {
     status: '',
     donorId: '',
   };
+  userId: string = '';
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   showNearByDonorContent: boolean = false;
   selectedBloodGroup: string | null = null;
@@ -48,7 +49,6 @@ export class RequestBloodPage implements OnInit {
     private afAuth: AngularFireAuth,
     public alertController: AlertController
   ) {}
-  userId: string = '';
   ngOnInit() {
     this.afAuth.authState.subscribe((user) => {
       if (user) {

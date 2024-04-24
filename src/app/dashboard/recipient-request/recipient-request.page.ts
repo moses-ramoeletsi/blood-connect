@@ -22,8 +22,10 @@ export class RecipientRequestPage implements OnInit {
     status: '',
     donorId: '',
   };
+  recipientId: string ="";
   userId: string = '';
   requests: any[] = [];
+  donationRequests: any[] = [];
 
   constructor(
     public requestData: RecipientService,
@@ -39,10 +41,19 @@ export class RecipientRequestPage implements OnInit {
         this.userId = user.uid;
         this.getRecipientDataById(this.userId);
         this.getRecipientRequestById(this.userId);
+        this.getReguestsForCurrentUser();
       }
     });
   }
 
+    getReguestsForCurrentUser(){
+    this.fireStore.collection('donateBlood', ref =>
+    ref.where('recipientId', '==', this.userId)
+  ).valueChanges().subscribe((donationRequests: any[]) => {
+    this.donationRequests = donationRequests;
+  });
+    
+  }
   getRecipientDataById(userId: string) {
     this.requestData
       .fetchRecipientDataById(userId)
