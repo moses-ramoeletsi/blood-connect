@@ -21,11 +21,11 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class DonateBloodPage implements OnInit {
 
-  recipients!: Observable<any[]>;
   map: any;
   marker: any;
   mapInitialized: boolean = false;
   userMarker: any;
+  recipients!: Observable<any[]>;
   bloodDonorForm = {
     firstName: '',
     address: '',
@@ -33,6 +33,9 @@ export class DonateBloodPage implements OnInit {
     bloodGroup: '',
     transfusionType: '',
     location: '',
+    message: '',
+    status: '',
+    recipientId: '',
   };
   userId: string = '';
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
@@ -40,8 +43,8 @@ export class DonateBloodPage implements OnInit {
   pickedBloodGroup: string | null = null;
   showMatchingResults: boolean = false;
 
-  donorId: string = ''; 
-  requests: any[] = [];
+  // donorId: string = ''; 
+  // requests: any[] = [];
 
   constructor(
     public firebaseService: DonateBloodService,
@@ -54,43 +57,56 @@ export class DonateBloodPage implements OnInit {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.userId = user.uid;
-        this.getReguestsForCurrentUser(); 
+        this.fetchUserData(this.userId);
+        // this.getReguestsForCurrentUser(); 
       }
     });
     this.fetchRecipients();
   }
-  getReguestsForCurrentUser(){
-    this.fireStore.collection('requestBlood', ref =>
-    ref.where('donorId', '==', this.userId)
-  ).valueChanges().subscribe((requests: any[]) => {
-    this.requests = requests;
-  });
-    
-  }
-
-  changeStatus(request: any, newStatus: string) {
-    request.status = newStatus;
-    this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', request.donorId))
-      .snapshotChanges()
-      .pipe(take(1))
-      .subscribe(snapshot => {
-        if (snapshot.length > 0) {
-          const docId = snapshot[0].payload.doc.id;
-          this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
-            .then(() => {
-              this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
-            })
-            .catch((error) => {
-              this.showAlert('Blood Request Error', 'Error updating status!');
-            });
-          } else {
-            this.showAlert('Id Not Found', request.donorId);
-        }
+  fetchUserData(userId: string) {
+    this.firebaseService
+      .fetchRecipientDataById(userId)
+      .then((userData) => {
+        this.bloodDonorForm.firstName = userData.firstName;
+        this.bloodDonorForm.phoneNumber = userData.phoneNumber;
+        this.bloodDonorForm.address = userData.address;
+        this.bloodDonorForm.bloodGroup = userData.bloodGroup;
+        this.bloodDonorForm.location = userData.location;
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
       });
   }
-  
 
- 
+  // getReguestsForCurrentUser(){
+  //   this.fireStore.collection('requestBlood', ref =>
+  //   ref.where('donorId', '==', this.userId)
+  // ).valueChanges().subscribe((requests: any[]) => {
+  //   this.requests = requests;
+  // });
+    
+  // }
+
+  // changeStatus(request: any, newStatus: string) {
+  //   request.status = newStatus;
+  //   this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', request.donorId))
+  //     .snapshotChanges()
+  //     .pipe(take(1))
+  //     .subscribe(snapshot => {
+  //       if (snapshot.length > 0) {
+  //         const docId = snapshot[0].payload.doc.id;
+  //         this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
+  //           .then(() => {
+  //             this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
+  //           })
+  //           .catch((error) => {
+  //             this.showAlert('Blood Request Error', 'Error updating status!');
+  //           });
+  //         } else {
+  //           this.showAlert('Id Not Found', request.donorId);
+  //       }
+  //     });
+  // }
   ngAfterViewInit() {
     this.getLocation();
   }
@@ -180,36 +196,33 @@ export class DonateBloodPage implements OnInit {
         ref.where('bloodGroup', '==', bloodGroup)
       );
 
-      nearbySeekersQuery.valueChanges().subscribe((recipients: any[]) => {
-        const recipientsWithDistance = recipients.map((recipient) => {
-          const recipientLatitude = parseFloat(
-            recipient.location.split(',')[0]
-          );
-          const recipientLongitude = parseFloat(
-            recipient.location.split(',')[1]
-          );
+      nearbySeekersQuery.snapshotChanges().subscribe((donorSnapshots: any[]) => {
+        const nearbySeekers = donorSnapshots.map((doc: any) => {
+          const recipientData = doc.payload.doc.data();
+          const recipientId = doc.payload.doc.id;
+          const donorLatitude = parseFloat(recipientData.location.split(',')[0]);
+          const donorLongitude = parseFloat(recipientData.location.split(',')[1]);
           const distance = this.calculateDistance(
             latitude,
             longitude,
-            recipientLatitude,
-            recipientLongitude
+            donorLatitude,
+            donorLongitude
           );
-          return { ...recipient, distance };
+          return { id: recipientId, ...recipientData, distance };
         });
 
-        const nearbyrecipients = recipientsWithDistance.filter(
+        const filteredRecipients = nearbySeekers.filter(
           (recipient) => recipient.distance <= maxDistance
         );
 
-        if (nearbyrecipients.length === 0) {
-          this.showAlert('Mathing Error', 'No matching donors found nearby.');
+        if (filteredRecipients.length === 0) {
+          this.showAlert('Matching Error', 'No matching donors found nearby.');
         } else {
-          const sortedNearbyrecipients = nearbyrecipients.sort(
+          const sortedNearbyDonors = filteredRecipients.sort(
             (a, b) => a.distance - b.distance
           );
-
           this.recipients = new Observable((observer) => {
-            observer.next(sortedNearbyrecipients);
+            observer.next(sortedNearbyDonors);
             observer.complete();
           });
         }
@@ -252,22 +265,31 @@ export class DonateBloodPage implements OnInit {
     this.showMatchingResults = true;
     this.fetchRecipients();
   }
-
-  hideMatchingResults() {
-    this.showMatchingResults = false;
-  }
-
   submitForm() {
     this.firebaseService
-      .donateBlood(this.bloodDonorForm)
+      .addDonationRequest(this.bloodDonorForm)
       .then((res) => {
         this.showAlert('Donor Posted', 'Donor successfully added!');
       })
       .catch((error) => {
         this.showAlert(
           'Donor Post Eroor',
-          'Error occurred! \n Donor not successful'
+          'Error occurred! \n Donor  Request not sent!'
         );
+      });
+  }
+   sentRequestForm(recipientId: string) {
+    console.log('Recipient:' ,recipientId)
+    this.bloodDonorForm.status = 'pending';
+    this.bloodDonorForm.recipientId = recipientId;
+    this.firebaseService
+      .sentDonation(this.bloodDonorForm)
+      .then(() => {
+        this.showAlert('Blood Request', 'Request send successfully!');
+      })
+      .catch((error) => {
+        console.log("Data not sent to the database:", error);
+        this.showAlert('Donor Request Error', 'Danation Request not sent!');
       });
   }
 

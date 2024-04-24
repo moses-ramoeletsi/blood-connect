@@ -107,6 +107,11 @@ ion-menu::part(backdrop) {
       font-weight: 600;
     }
   }
+  .connect-button {
+    margin-top: 8px;
+    margin-bottom: 4px;
+    --background: var(--ion-color-btn);
+  }
   .matching-blood-group h2 {
     text-align: center; 
     margin: 0 auto; 
