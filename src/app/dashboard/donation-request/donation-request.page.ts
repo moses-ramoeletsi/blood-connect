@@ -91,9 +91,9 @@ export class DonationRequestPage implements OnInit {
     
   }
 
-  changeStatus(request: any, newStatus: string) {
-    request.status = newStatus;
-    this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', request.donorId))
+  changeStatus(recipientRequest: any, newStatus: string) {
+    recipientRequest.status = newStatus;
+    this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', recipientRequest.donorId))
       .snapshotChanges()
       .pipe(take(1))
       .subscribe(snapshot => {
@@ -107,7 +107,7 @@ export class DonationRequestPage implements OnInit {
               this.showAlert('Blood Request Error', 'Error updating status!');
             });
           } else {
-            this.showAlert('Id Not Found', request.donorId);
+            this.showAlert('Id Not Found', recipientRequest.donorId);
         }
       });
   }

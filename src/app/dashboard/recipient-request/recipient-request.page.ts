@@ -4,6 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { RecipientService } from 'src/app/services/recipient.service';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-recipient-request',
@@ -85,6 +86,28 @@ export class RecipientRequestPage implements OnInit {
       })
       .catch((error) => {
         console.error('Error fetching request data:', error);
+      });
+  }
+
+  
+  changeStatus(request: any, newStatus: string) {
+    request.status = newStatus;
+    this.fireStore.collection('donateBlood', ref => ref.where('recipientId', '==', request.donorId))
+      .snapshotChanges()
+      .pipe(take(1))
+      .subscribe(snapshot => {
+        if (snapshot.length > 0) {
+          const docId = snapshot[0].payload.doc.id;
+          this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
+            .then(() => {
+              this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
+            })
+            .catch((error) => {
+              this.showAlert('Blood Request Error', 'Error updating status!');
+            });
+          } else {
+            this.showAlert('Id Not Found', request.donorId);
+        }
       });
   }
 

@@ -66,8 +66,8 @@
         <p><strong>Address:</strong> {{ donationRequest.address }}</p>
         <p><strong>Location:</strong> {{ donationRequest.location }}</p>
         <p><strong>Message:</strong> {{ donationRequest.message }}</p>
-        <!-- <ion-button (click)="changeStatus(request, 'Approved')">Approve</ion-button>
-        <ion-button (click)="changeStatus(request, 'Rejected')">Reject</ion-button> -->
+        <ion-button (click)="changeStatus(donationRequest, 'Approved')">Approve</ion-button>
+        <ion-button (click)="changeStatus(donationRequest, 'Rejected')">Reject</ion-button>
       </ion-card-content>
     </ion-card>
   
