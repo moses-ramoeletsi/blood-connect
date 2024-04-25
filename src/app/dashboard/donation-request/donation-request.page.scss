@@ -138,3 +138,6 @@ ion-menu::part(backdrop) {
     justify-content: center; 
     width: 100%; 
   }
+  .custom-alert{
+    --background: #fff;
+  }

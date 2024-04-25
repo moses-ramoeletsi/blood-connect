@@ -43,7 +43,8 @@ export class DonationRequestPage implements OnInit {
         this.userId = user.uid;
         this.getDonorDataById(this.userId);
         this.getDonorRequestById(this.userId);
-        this.getReguestsForCurrentUser(); 
+        this.getRequestsForCurrentUser(); 
+       
       }
     });
   }
@@ -82,15 +83,16 @@ export class DonationRequestPage implements OnInit {
       });
   }
 
-    getReguestsForCurrentUser(){
-    this.fireStore.collection('requestBlood', ref =>
-    ref.where('donorId', '==', this.userId)
-  ).valueChanges().subscribe((recipientRequests: any[]) => {
-    this.recipientRequests = recipientRequests;
-  });
-    
-  }
 
+
+  getRequestsForCurrentUser() {
+    this.fireStore.collection('requestBlood', ref =>
+      ref.where('donorId', '==', this.userId)
+    ).valueChanges().subscribe((recipientRequests: any[]) => {
+      this.recipientRequests = recipientRequests;
+    });
+  }
+    
   changeStatus(recipientRequest: any, newStatus: string) {
     recipientRequest.status = newStatus;
     this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', recipientRequest.donorId))
@@ -101,19 +103,21 @@ export class DonationRequestPage implements OnInit {
           const docId = snapshot[0].payload.doc.id;
           this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
             .then(() => {
-              this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
+              this.showAlert('Blood Request', 'Request Status Changed successfully!');
             })
             .catch((error) => {
               this.showAlert('Blood Request Error', 'Error updating status!');
             });
-          } else {
-            this.showAlert('Id Not Found', recipientRequest.donorId);
+        } else {
+          this.showAlert('Id Not Found', recipientRequest.donorId);
         }
       });
   }
+  
   async editRequest(request: any) {
     const alert = await this.alertController.create({
       header: 'Edit Request',
+      cssClass: 'custom-alert',
       inputs: [
         {
           name: 'firstName',
@@ -144,6 +148,7 @@ export class DonationRequestPage implements OnInit {
         {
           text: 'Cancel',
           role: 'cancel',
+          cssClass: 'cancel-button',
         },
         {
           text: 'Save',
@@ -156,18 +161,18 @@ export class DonationRequestPage implements OnInit {
                   .doc(currentUser.uid)
                   .update(data);
                 this.showAlert('Success', 'Request updated successfully.');
+                window.location.reload();
               } else {
                 throw new Error('User not found');
               }
             } catch (error) {
-              console.error('Error updating request:', error);
               this.showAlert('Error', 'Failed to update request.');
             }
           },
         },
       ],
+      
     });
-
     await alert.present();
   }
 
@@ -191,11 +196,11 @@ export class DonationRequestPage implements OnInit {
                   .doc(currentUser.uid)
                   .delete();
                 this.showAlert('Success', 'Request deleted successfully.');
+                window.location.reload();
               } else {
                 throw new Error('User not found');
               }
             } catch (error) {
-              console.error('Error deleting request:', error);
               this.showAlert('Error', 'Failed to delete request.');
             }
           },
@@ -205,6 +210,7 @@ export class DonationRequestPage implements OnInit {
 
     await alert.present();
   }
+
   logout() {
     this.router.navigate(['/login-page']);
   }
@@ -218,5 +224,4 @@ export class DonationRequestPage implements OnInit {
       })
       .then((alert) => alert.present());
   }
-
 }

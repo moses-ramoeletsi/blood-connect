@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Observable, take } from 'rxjs';
 import { DonateBloodService } from 'src/app/services/donate-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
@@ -20,7 +20,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./donate-blood.page.scss'],
 })
 export class DonateBloodPage implements OnInit {
-
   map: any;
   marker: any;
   mapInitialized: boolean = false;
@@ -43,9 +42,6 @@ export class DonateBloodPage implements OnInit {
   pickedBloodGroup: string | null = null;
   showMatchingResults: boolean = false;
 
-  // donorId: string = ''; 
-  // requests: any[] = [];
-
   constructor(
     public firebaseService: DonateBloodService,
     public fireStore: AngularFirestore,
@@ -58,11 +54,11 @@ export class DonateBloodPage implements OnInit {
       if (user) {
         this.userId = user.uid;
         this.fetchUserData(this.userId);
-        // this.getReguestsForCurrentUser(); 
       }
     });
     this.fetchRecipients();
   }
+
   fetchUserData(userId: string) {
     this.firebaseService
       .fetchRecipientDataById(userId)
@@ -77,36 +73,6 @@ export class DonateBloodPage implements OnInit {
         console.error('Error fetching user data:', error);
       });
   }
-
-  // getReguestsForCurrentUser(){
-  //   this.fireStore.collection('requestBlood', ref =>
-  //   ref.where('donorId', '==', this.userId)
-  // ).valueChanges().subscribe((requests: any[]) => {
-  //   this.requests = requests;
-  // });
-    
-  // }
-
-  // changeStatus(request: any, newStatus: string) {
-  //   request.status = newStatus;
-  //   this.fireStore.collection('requestBlood', ref => ref.where('donorId', '==', request.donorId))
-  //     .snapshotChanges()
-  //     .pipe(take(1))
-  //     .subscribe(snapshot => {
-  //       if (snapshot.length > 0) {
-  //         const docId = snapshot[0].payload.doc.id;
-  //         this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
-  //           .then(() => {
-  //             this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
-  //           })
-  //           .catch((error) => {
-  //             this.showAlert('Blood Request Error', 'Error updating status!');
-  //           });
-  //         } else {
-  //           this.showAlert('Id Not Found', request.donorId);
-  //       }
-  //     });
-  // }
   ngAfterViewInit() {
     this.getLocation();
   }
@@ -196,37 +162,46 @@ export class DonateBloodPage implements OnInit {
         ref.where('bloodGroup', '==', bloodGroup)
       );
 
-      nearbySeekersQuery.snapshotChanges().subscribe((donorSnapshots: any[]) => {
-        const nearbySeekers = donorSnapshots.map((doc: any) => {
-          const recipientData = doc.payload.doc.data();
-          const recipientId = doc.payload.doc.id;
-          const donorLatitude = parseFloat(recipientData.location.split(',')[0]);
-          const donorLongitude = parseFloat(recipientData.location.split(',')[1]);
-          const distance = this.calculateDistance(
-            latitude,
-            longitude,
-            donorLatitude,
-            donorLongitude
-          );
-          return { id: recipientId, ...recipientData, distance };
-        });
-
-        const filteredRecipients = nearbySeekers.filter(
-          (recipient) => recipient.distance <= maxDistance
-        );
-
-        if (filteredRecipients.length === 0) {
-          this.showAlert('Matching Error', 'No matching donors found nearby.');
-        } else {
-          const sortedNearbyDonors = filteredRecipients.sort(
-            (a, b) => a.distance - b.distance
-          );
-          this.recipients = new Observable((observer) => {
-            observer.next(sortedNearbyDonors);
-            observer.complete();
+      nearbySeekersQuery
+        .snapshotChanges()
+        .subscribe((donorSnapshots: any[]) => {
+          const nearbySeekers = donorSnapshots.map((doc: any) => {
+            const recipientData = doc.payload.doc.data();
+            const recipientId = doc.payload.doc.id;
+            const donorLatitude = parseFloat(
+              recipientData.location.split(',')[0]
+            );
+            const donorLongitude = parseFloat(
+              recipientData.location.split(',')[1]
+            );
+            const distance = this.calculateDistance(
+              latitude,
+              longitude,
+              donorLatitude,
+              donorLongitude
+            );
+            return { id: recipientId, ...recipientData, distance };
           });
-        }
-      });
+
+          const filteredRecipients = nearbySeekers.filter(
+            (recipient) => recipient.distance <= maxDistance
+          );
+
+          if (filteredRecipients.length === 0) {
+            this.showAlert(
+              'Matching Error',
+              'No matching donors found nearby.'
+            );
+          } else {
+            const sortedNearbyDonors = filteredRecipients.sort(
+              (a, b) => a.distance - b.distance
+            );
+            this.recipients = new Observable((observer) => {
+              observer.next(sortedNearbyDonors);
+              observer.complete();
+            });
+          }
+        });
     } else {
       console.error('Invalid user location');
     }
@@ -278,8 +253,8 @@ export class DonateBloodPage implements OnInit {
         );
       });
   }
-   sentRequestForm(recipientId: string) {
-    console.log('Recipient:' ,recipientId)
+  sentRequestForm(recipientId: string) {
+    console.log('Recipient:', recipientId);
     this.bloodDonorForm.status = 'pending';
     this.bloodDonorForm.recipientId = recipientId;
     this.firebaseService
@@ -288,7 +263,7 @@ export class DonateBloodPage implements OnInit {
         this.showAlert('Blood Request', 'Request send successfully!');
       })
       .catch((error) => {
-        console.log("Data not sent to the database:", error);
+        console.log('Data not sent to the database:', error);
         this.showAlert('Donor Request Error', 'Danation Request not sent!');
       });
   }

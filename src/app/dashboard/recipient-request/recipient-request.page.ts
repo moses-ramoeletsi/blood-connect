@@ -85,7 +85,7 @@ export class RecipientRequestPage implements OnInit {
         }
       })
       .catch((error) => {
-        console.error('Error fetching request data:', error);
+        this.showAlert('Error','Error fetching request data:');
       });
   }
 
@@ -156,11 +156,11 @@ export class RecipientRequestPage implements OnInit {
                   .doc(currentUser.uid)
                   .update(data);
                 this.showAlert('Success', 'Request updated successfully.');
+                window.location.reload();
               } else {
                 throw new Error('User not found');
               }
             } catch (error) {
-              console.error('Error updating request:', error);
               this.showAlert('Error', 'Failed to update request.');
             }
           },
@@ -191,11 +191,11 @@ export class RecipientRequestPage implements OnInit {
                   .doc(currentUser.uid)
                   .delete();
                 this.showAlert('Success', 'Request deleted successfully.');
+                window.location.reload();
               } else {
                 throw new Error('User not found');
               }
             } catch (error) {
-              console.error('Error deleting request:', error);
               this.showAlert('Error', 'Failed to delete request.');
             }
           },

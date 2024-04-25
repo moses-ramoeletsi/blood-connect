@@ -11,10 +11,9 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-userName: string ="";
-user: Observable<UserDetails | null>;
-upcomingEvents: any[];
-currentTipIndex: number = 0;
+  userName: string ="";
+  user: Observable<UserDetails | null>;
+  currentTipIndex: number = 0;
   tips: string[] = [
     "Ensure you are well-hydrated before donating blood.",
     "Eat a healthy meal before donating blood to maintain blood sugar levels.",
@@ -43,14 +42,12 @@ currentTipIndex: number = 0;
         this.userName = userDetails.firstName;
       }
     })
-    this.upcomingEvents = [
-      { name: 'Event 1', date: '2024-04-15', location: 'Location 1', description: 'Description 1' },
-      { name: 'Event 2', date: '2024-04-20', location: 'Location 2', description: 'Description 2' },
-    ];
+    
   }
 
-
   ngOnInit() {
+    this.refreshPage(); 
+
     this.timerSubscription = interval(5000).subscribe(() => {
       this.showNextTip();
     });
@@ -65,8 +62,12 @@ currentTipIndex: number = 0;
   showNextTip() {
     this.currentTipIndex = (this.currentTipIndex + 1) % this.tips.length;
   }
-  logout(){
+
+  logout() {
     this.router.navigate(['/login-page']);
   }
-  }
 
+  refreshPage() {
+   
+  }
+}
