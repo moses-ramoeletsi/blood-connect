@@ -40,6 +40,10 @@ const routes: Routes = [
     path: 'donation-request',
     loadChildren: () => import('./dashboard/donation-request/donation-request.module').then( m => m.DonationRequestPageModule)
   },
+  {
+    path: 'events',
+    loadChildren: () => import('./dashboard/events/events.module').then( m => m.EventsPageModule)
+  },
 ];
 
 @NgModule({

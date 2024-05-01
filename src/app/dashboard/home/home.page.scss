@@ -114,47 +114,6 @@ ion-grid ion-card-content {
   font-weight: 600;
 }
 
-.upcoming-events {
-  margin-top: 10px;
-}
-
-.upcoming-events ion-card {
-  border-radius: 15px;
-  background-color: #fff;
-  border: 1px solid #8a030380;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.upcoming-events ion-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.upcoming-events ion-card-header {
-  padding-bottom: 0;
-}
-
-.upcoming-events ion-card-content {
-  padding-top: 0;
-}
-
-.upcoming-events ion-card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: black;
-}
-
-.upcoming-events ion-card-subtitle {
-  font-size: 1rem;
-  color: #666;
-}
-
-.upcoming-events ion-card:hover {
-  transform: translateY(-5px);
-  transition: transform 0.3s ease;
-}
 .mycolor{
   --background: var(--ion-color-btn);
 }

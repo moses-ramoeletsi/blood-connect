@@ -4,6 +4,7 @@ export interface BloodRequestDetails{
     phoneNumber: number;
     bloodGroup: string;
     transfusionType: string;
+    urgency: string;
     location:string;
     message:string;
 }

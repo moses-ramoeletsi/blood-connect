@@ -33,7 +33,7 @@ ion-button {
 
 .login {
   color: #8a0303;
-  margin-left: 1rem;
+ text-align: center;
 }
 
 p {
@@ -54,26 +54,6 @@ ion-input,
 ion-button {
   width: 100%;
   max-width: 300px;
-}
-
-@media only screen and (max-width: 600px) {
-  .myHeader {
-    font-size: 20px;
-  }
-}
-
-
-@media only screen and (min-width: 601px) and (max-width: 1024px) {
-  .myHeader {
-    font-size: 22px;
-  }
-}
-
-
-@media only screen and (min-width: 1025px) {
-  .myHeader {
-    font-size: 28px;
-  }
 }
 
 .error-message {

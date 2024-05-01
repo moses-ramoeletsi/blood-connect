@@ -34,6 +34,7 @@ export class RequestBloodPage implements OnInit {
     phoneNumber: '',
     bloodGroup: '',
     transfusionType: '',
+    urgency: '',
     location: '',
     message: '',
     status: '',

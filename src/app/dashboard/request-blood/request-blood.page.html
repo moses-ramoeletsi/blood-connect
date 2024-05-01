@@ -1,28 +1,4 @@
 <ion-content [fullscreen]="true">
-  <ion-app>
-    <ion-menu contentId="main-content" side="start" menuId="first">
-      <ion-toolbar class="menuContent">
-        <img
-          alt="blood Connect"
-          src="../../../assets/images/bloodConnect.png"
-        />
-      </ion-toolbar>
-      <ion-content class="content-padding">
-        <ion-list lines="none">
-          <ion-item>
-            <ion-label [routerLink]="['/request-blood']"
-              >Request Blood</ion-label
-            >
-          </ion-item>
-          <ion-item>
-            <ion-label [routerLink]="['/donate-blood']">Donate Blood</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label [routerLink]="['/blood-banks']">Blood Banks</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-menu>
     <div class="ion-page" id="main-content">
       <ion-header>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -243,6 +219,24 @@
                     >Blood Bank</ion-select-option
                   >
                 </ion-select>
+                <br>
+                <ion-select
+                  label="Urgency"
+                  name="urgency"
+                  [(ngModel)]="bloodRequestForm.urgency"
+                  label-placement="floating"
+                  fill="outline"
+                >
+                  <ion-select-option value="Emergency"
+                    >Emergency</ion-select-option
+                  >
+                  <ion-select-option value="Significant"
+                    >Significant</ion-select-option
+                  >
+                  <ion-select-option value="Minor"
+                    >Minor</ion-select-option
+                  >
+                </ion-select>
                 <br />
                 <ion-button
                   class="mycolor"
@@ -404,5 +398,4 @@
         </div>
       </ion-content>
     </div>
-  </ion-app>
 </ion-content>

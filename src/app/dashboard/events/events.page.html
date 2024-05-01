@@ -1,0 +1,40 @@
+
+<ion-content [fullscreen]="true">
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+         <h2>Events</h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+              alt="profile"
+              src="../../../assets/images/bloodConnect.png"
+            ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content [fullscreen]="true" class="ion-padding">
+      <ion-buttons routerLink="/home" style="color: black">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        <ion-label>Back</ion-label>
+      </ion-buttons>
+      <div class="upcoming-events" style="background-color: transparent;">
+        <ion-card *ngFor="let event of events" style="margin: 10px;">
+          <ion-card-header>
+            <ion-card-title>{{ event.name }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Date: {{ event.date }}</p>
+            <p>Time: {{ event.time }}</p>
+            <p>Location: {{ event.location }}</p>
+            <p>{{ event.description }}</p>
+          </ion-card-content>
+        </ion-card>
+        
+      </div>
+      </ion-content>
+  </div>
+</ion-content>
