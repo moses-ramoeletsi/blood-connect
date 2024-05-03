@@ -290,13 +290,13 @@
                     }}
                   </p>
                 </ion-label>
-                <ion-button class="connect-button" id="open-connect-modal">
+                <ion-button class="connect-button" id="open-connect-modal-{{recipient.id}}">
                   Connect</ion-button
                 >
 
                 <ion-modal
                   [keepContentsMounted]="true"
-                  trigger="open-connect-modal"
+                  trigger="open-connect-modal{{recipient.id}}"
                   #modal
                 >
                   <ng-template>

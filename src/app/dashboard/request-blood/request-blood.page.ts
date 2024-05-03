@@ -5,17 +5,7 @@ import { Observable } from 'rxjs';
 import { RequestBloodService } from 'src/app/services/request-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { GeolocationPosition } from '@capacitor/geolocation';
-import {
-  LatLng,
-  LatLngTuple,
-  LeafletMouseEvent,
-  Map,
-  icon,
-  marker,
-  tileLayer,
-} from 'leaflet';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-request-blood',
@@ -23,8 +13,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./request-blood.page.scss'],
 })
 export class RequestBloodPage implements OnInit {
-  map: any;
-  marker: any;
+  // map: any;
+  // marker: any;
   mapInitialized: boolean = false;
   userMarker: any;
   donors!: Observable<any[]>;
@@ -80,69 +70,18 @@ export class RequestBloodPage implements OnInit {
   ngAfterViewInit() {
     this.getLocation();
   }
-  initializeMap(center: LatLngTuple) {
-    if (!this.mapInitialized) {
-      this.map = new Map('map', {
-        center: center,
-        zoom: 8,
-      });
 
-      const tiles = tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-          maxZoom: 20,
-          minZoom: 4,
-        }
-      );
-
-      tiles.addTo(this.map);
-
-      this.map.on('click', (event: LeafletMouseEvent) => {
-        this.updateMarkerPosition(event.latlng);
-      });
-
-      this.mapInitialized = true;
-    }
-  }
   getLocation() {
-    Geolocation['getCurrentPosition']()
-      .then((position: any) => {
-        const geoPosition: GeolocationPosition =
-          position as GeolocationPosition;
-        const { latitude, longitude } = geoPosition.coords;
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        (position) =>{
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
 
-        const userLocation: LatLngTuple = [latitude, longitude];
-
-        this.initializeMap(userLocation);
-
-        this.userMarker = marker(userLocation).addTo(this.map);
-
-        const customIcon = icon({
-          iconUrl: 'assets/images/pin.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-        });
-
-        this.userMarker.setIcon(customIcon);
-
-        this.updateCoordinatesInput(userLocation);
-      })
-      .catch((error) => {
-        this.showAlert('Error', 'Error Getting user location');
-      });
-  }
-
-  updateMarkerPosition(position: LatLng) {
-    if (this.userMarker) {
-      const { lat, lng } = position;
-      const newPosition: LatLngTuple = [lat, lng];
-      this.userMarker.setLatLng(newPosition);
-      this.updateCoordinatesInput(newPosition);
+          this.bloodRequestForm.location = latitude + "," + longitude
+        }
+      )
     }
-  }
-  updateCoordinatesInput(position: LatLngTuple) {
-    this.bloodRequestForm.location = `${position[0]}, ${position[1]}`;
   }
 
   async toggleNearByDonorContent() {
@@ -181,7 +120,7 @@ export class RequestBloodPage implements OnInit {
             donorLatitude,
             donorLongitude
           );
-          return { id: donorId, ...donorData, distance };
+          return { id: donorId, ...donorData, distance};
         });
 
         const filteredDonors = nearbyDonors.filter(

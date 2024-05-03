@@ -306,12 +306,13 @@
                     <strong>Location Coordinates:</strong> {{ donor.location }}
                   </p>
                 </ion-label>
-                <ion-button class="connect-button" id="open-connect-modal">
+                
+                <ion-button class="connect-button" id="open-connect-modal-{{donor.id}}">
                   Connect</ion-button
                 >
                 <ion-modal
                   [keepContentsMounted]="true"
-                  trigger="open-connect-modal"
+                  trigger="open-connect-modal-{{donor.id}}"
                   #modal
                 >
                   <ng-template>
