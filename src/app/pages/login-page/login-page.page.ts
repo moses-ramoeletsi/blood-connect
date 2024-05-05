@@ -34,31 +34,28 @@ export class LoginPagePage implements OnInit {
   }
 
   login() {
-    if(this.loginForm.valid){
+    if (this.loginForm.valid) {
       const userLogin = this.loginForm.value;
       this.fireServices
         .loginWithEmail(userLogin)
         .then((userDetails) => {
           const user = userDetails.user;
   
-          this.fireServices.getUserDetails(user).subscribe((userData) => {
-            if (userData) {
+          this.fireServices.getUserDetails(user).subscribe((userData: any) => {
+            if (userData && Object.keys(userData).length !== 0) { 
               this.router.navigate(['/home']);
-            } else {
-              this.showAlert(
-                'Login Failed',
-                'An error occurred while trying to log in.'
-              );
-            }
+            } 
           });
         })
         .catch((error) => {
           this.showAlert('User Not Found', 'The user does not exist.');
         });
-    }else {
+    } else {
       this.showAlert('Form Error', 'Please check the form fields.');
     }
   }
+  
+  
 
   showAlert(title: string, message: string) {
     this.alertController

@@ -42,19 +42,11 @@ export class RecipientRequestPage implements OnInit {
         this.userId = user.uid;
         this.getRecipientDataById(this.userId);
         this.getRecipientRequestById(this.userId);
-        this.getReguestsForCurrentUser();
       }
     });
   }
 
-    getReguestsForCurrentUser(){
-    this.fireStore.collection('donateBlood', ref =>
-    ref.where('recipientId', '==', this.userId)
-  ).valueChanges().subscribe((donationRequests: any[]) => {
-    this.donationRequests = donationRequests;
-  });
-    
-  }
+  
   getRecipientDataById(userId: string) {
     this.requestData
       .fetchRecipientDataById(userId)
@@ -66,11 +58,11 @@ export class RecipientRequestPage implements OnInit {
           this.bloodRequetsForm.bloodGroup = userData.bloodGroup;
           this.bloodRequetsForm.location = userData.location;
         } else {
-          this.showAlert('Error', 'No matching user data found.');
+          // this.showAlert('Error', 'No matching user data found.');
         }
       })
       .catch((error) => {
-        this.showAlert('Error', 'Failed to fetch user data.');
+        // this.showAlert('Error', 'Failed to fetch user data.');
       });
   }
 
@@ -81,35 +73,16 @@ export class RecipientRequestPage implements OnInit {
         if (userData) {
           this.requests.push(userData);
         } else {
-          this.showAlert('Error', 'No matching request data found.');
+          
         }
       })
       .catch((error) => {
-        this.showAlert('Error','Error fetching request data:');
+        console.log('Error', error);
       });
   }
 
   
-  changeStatus(request: any, newStatus: string) {
-    request.status = newStatus;
-    this.fireStore.collection('donateBlood', ref => ref.where('recipientId', '==', request.donorId))
-      .snapshotChanges()
-      .pipe(take(1))
-      .subscribe(snapshot => {
-        if (snapshot.length > 0) {
-          const docId = snapshot[0].payload.doc.id;
-          this.fireStore.collection('requestBlood').doc(docId).update({ status: newStatus })
-            .then(() => {
-              this.showAlert('Blood Request', 'Request Status Chnaged successfully!');
-            })
-            .catch((error) => {
-              this.showAlert('Blood Request Error', 'Error updating status!');
-            });
-          } else {
-            this.showAlert('Id Not Found', request.donorId);
-        }
-      });
-  }
+
 
   async editRequest(request: any) {
     const alert = await this.alertController.create({
@@ -152,7 +125,7 @@ export class RecipientRequestPage implements OnInit {
               const currentUser = await this.afAuth.currentUser;
               if (currentUser) {
                 await this.fireStore
-                  .collection('requestBlood')
+                  .collection('recipients')
                   .doc(currentUser.uid)
                   .update(data);
                 this.showAlert('Success', 'Request updated successfully.');

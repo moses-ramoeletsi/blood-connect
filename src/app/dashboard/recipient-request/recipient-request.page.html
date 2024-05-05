@@ -4,7 +4,7 @@
       <ion-header>
         <ion-toolbar class="myMenu">
           <ion-buttons slot="start">
-            <h2>Recipient Requests</h2>
+            <h2 style="color: white;">Recipient Requests</h2>
           </ion-buttons>
           <ion-buttons slot="end">
             <ion-avatar>
@@ -64,9 +64,16 @@
             <p><strong>Address:</strong> {{ request.address }}</p>
             <p><strong>Location:</strong> {{ request.location }}</p>
             <p><strong>Message:</strong> {{ request.message }}</p>
-            <div class="button-container">
-              <ion-button (click)="editRequest(request)">Edit</ion-button>
-              <ion-button (click)="deleteRequest()">Delete</ion-button>
+            <div *ngIf="request.status !== 'Approved'">
+              <div class="button-container">
+                <ion-button (click)="editRequest(request)">Edit</ion-button>
+                <ion-button (click)="deleteRequest()">Delete</ion-button>
+              </div>
+            </div>
+            <div *ngIf="request.status === 'Approved'">
+              <h3>Donor Details</h3>
+              <p><strong>Donor Name:</strong> {{ request.donor_name }}</p>
+              <p><strong>Donor Contacts:</strong> {{ request.donor_phoneNumber }}</p>
             </div>
           
           </ion-card-content>
@@ -74,28 +81,6 @@
         <div *ngIf="requests.length === 0" style="color: red">
           No matching requests found.
         </div>
-    
-          <h2>Incoming Requests</h2>
-          <ion-card *ngFor="let donationRequest of donationRequests"  class="request-card">
-            <ion-avatar class="avatar">
-              <ion-card-title class="blood-group">{{ donationRequest.bloodGroup }}</ion-card-title>
-            </ion-avatar>
-            <ion-card-content class="requestInfo">
-              <p><strong>Blood Group:</strong>{{ donationRequest.firstName }}</p>
-              <p><strong>Address:</strong> {{ donationRequest.address }}</p>
-              <p><strong>Location:</strong> {{ donationRequest.location }}</p>
-              <p><strong>Message:</strong> {{ donationRequest.message }}</p>
-              <div class="button-container">
-              <ion-button (click)="changeStatus(donationRequest, 'Approved')">Approve</ion-button>
-              <ion-button (click)="changeStatus(donationRequest, 'Rejected')">Reject</ion-button>
-              </div>
-            </ion-card-content>
-          </ion-card>
-      
-          <div *ngIf="donationRequests.length === 0" style="color: red;">
-            No matching requests found.
-          </div>
-
       </ion-content>
     </div>
 </ion-content>

@@ -25,7 +25,8 @@ export class RequestBloodService {
       return Promise.reject('User is not logged in.');
     }
   }
-
+  
+  
   async fetchUserDataById(
     userId: string
   ): Promise<{ bloodGroup: string; location: string }> {
@@ -46,6 +47,18 @@ export class RequestBloodService {
     }
   }
 
+  async fetchCurrentUserById(userId: string): Promise<any> {
+    try {
+      const doc = await this.firebaseStore.collection('users').doc(userId).get().toPromise();
+      if (doc && doc.exists) {
+        return doc.data();
+      } else {
+        throw new Error('User data not found');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
   async fetchRecipientDataById(userId: string): Promise<any> {
     try {
       const doc = await this.firebaseStore.collection('recipients').doc(userId).get().toPromise();

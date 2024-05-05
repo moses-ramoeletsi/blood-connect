@@ -24,7 +24,7 @@ export class DonationService {
   }
   async fetchDonorRequestById(userId: string): Promise<any> {
     try {
-      const doc = await this.fireStore.collection('donateBlood').doc(userId).get().toPromise();
+      const doc = await this.fireStore.collection('donors').doc(userId).get().toPromise();
       if (doc && doc.exists) {
         return doc.data();
       } else {

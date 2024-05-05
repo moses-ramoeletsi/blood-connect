@@ -1,18 +1,16 @@
 <ion-content [fullscreen]="true">
     <div class="ion-page" id="main-content">
       <ion-header>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <ion-toolbar class="myMenu">
           <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
+            <h2 style="color: white;">Request Blood</h2>
           </ion-buttons>
           <ion-buttons slot="end">
             <ion-avatar>
               <ion-img
-                class="logo"
-                alt="logo"
-                src="../../../assets/images/bloodConnect.png"
-              />
+              alt="profile"
+              src="../../../assets/images/bloodConnect.png"
+            ></ion-img>
             </ion-avatar>
           </ion-buttons>
         </ion-toolbar>
@@ -127,7 +125,7 @@
                   <p><strong>Phone Number:</strong> {{ donor.phoneNumber }}</p>
                   <p><strong>Address:</strong> {{ donor.address }}</p>
                   <p>
-                    <strong>Location Coordinates:</strong> {{ donor.location }}
+                  <strong>Location Coordinates:</strong> {{ donor.location }}
                   </p>
                 </ion-label>
               </ion-col>
@@ -158,33 +156,6 @@
             </ion-header>
             <ion-content class="ion-padding">
               <form class="requestBlood-form" (ngSubmit)="submitForm()">
-                <ion-input
-                  label="Name"
-                  name="name"
-                  [(ngModel)]="bloodRequestForm.firstName"
-                  label-placement="floating"
-                  fill="outline"
-                  placeholder="Enter Name"
-                ></ion-input>
-                <br />
-                <ion-input
-                  label="Address"
-                  name="address"
-                  [(ngModel)]="bloodRequestForm.address"
-                  label-placement="floating"
-                  fill="outline"
-                  placeholder="Enter Email"
-                ></ion-input>
-                <br />
-                <ion-input
-                  label="Phone Number"
-                  name="phoneNumber"
-                  [(ngModel)]="bloodRequestForm.phoneNumber"
-                  label-placement="floating"
-                  fill="outline"
-                  placeholder="Enter Phone Number"
-                ></ion-input>
-                <br />
                 <ion-select
                   label="Blood Group"
                   name="bloodGroup"
@@ -238,13 +209,15 @@
                   >
                 </ion-select>
                 <br />
-                <ion-button
-                  class="mycolor"
-                  type="button"
-                  expand="block"
-                  (click)="getLocation()"
-                  >Get Location</ion-button
-                >
+                <ion-textarea
+            label="Message"
+            name="message"
+            [(ngModel)]="bloodRequestForm.message"
+            label-placement="floating"
+            fill="outline"
+            placeholder="Your message goes here..."
+          ></ion-textarea>
+          <br>
                 <div id="map"></div>
                 <link
                   rel="stylesheet"
@@ -281,6 +254,7 @@
         </ion-buttons>
         <div class="donors">
           <h2>Near By Donors</h2>
+          <div *ngIf="(donors | async)?.length === 0">No matching recipients found.</div>
           <ion-card
             class="match-donor-card"
             *ngFor="let donor of donors | async"
@@ -307,92 +281,9 @@
                   </p>
                 </ion-label>
                 
-                <ion-button class="connect-button" id="open-connect-modal-{{donor.id}}">
-                  Connect</ion-button
+                <ion-button class="connect-button" (click)="requestBloodFromDonor(donor.id)" >
+                  Make Request</ion-button
                 >
-                <ion-modal
-                  [keepContentsMounted]="true"
-                  trigger="open-connect-modal-{{donor.id}}"
-                  #modal
-                >
-                  <ng-template>
-                    <ion-header>
-                      <ion-toolbar>
-                        <ion-title class="ion-text-center"
-                          >Connect To Donor</ion-title
-                        >
-                        <ion-buttons slot="end">
-                          <ion-button (click)="modal.dismiss()"
-                            >Cancel</ion-button
-                          >
-                        </ion-buttons>
-                      </ion-toolbar>
-                    </ion-header>
-                    <ion-content class="ion-padding">
-                      <form
-                        class="connect-form"
-                        (ngSubmit)="sentRequestForm(donor.id)"
-                      >
-                        <ion-input
-                          label="Name"
-                          name="name"
-                          [(ngModel)]="bloodRequestForm.firstName"
-                          label-placement="floating"
-                          fill="outline"
-                          placeholder="Enter Name"
-                        ></ion-input>
-                        <br />
-                        <ion-input
-                          label="Phone Number"
-                          name="phoneNumber"
-                          [(ngModel)]="bloodRequestForm.phoneNumber"
-                          label-placement="floating"
-                          fill="outline"
-                          placeholder="Enter Phone Number"
-                        ></ion-input>
-                        <br />
-                        <ion-input
-                          label="Address"
-                          name="address"
-                          [(ngModel)]="bloodRequestForm.address"
-                          label-placement="floating"
-                          fill="outline"
-                        ></ion-input>
-                        <br />
-                        <ion-input
-                          label="Blood Group"
-                          name="bloodGroup"
-                          [(ngModel)]="bloodRequestForm.bloodGroup"
-                          label-placement="floating"
-                          fill="outline"
-                        >
-                        </ion-input>
-                        <br />
-                        <ion-input
-                          label="Location Coordinates"
-                          name="locationCoordinates"
-                          [(ngModel)]="bloodRequestForm.location"
-                          label-placement="floating"
-                          fill="outline"
-                          placeholder="Latitude, Longitude"
-                        ></ion-input>
-                        <br />
-                        <ion-textarea
-                          label="Message"
-                          name="message"
-                          label-placement="floating"
-                          fill="outline"
-                          [(ngModel)]="bloodRequestForm.message"
-                          placeholder="Your message goes here..."
-                        ></ion-textarea>
-                        <br />
-                        <ion-button class="mycolor" type="submit" expand="block"
-                          >Make Request</ion-button
-                        >
-                      </form>
-                    </ion-content>
-                  </ng-template>
-                </ion-modal>
               </ion-col>
             </ion-row>
           </ion-card>

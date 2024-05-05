@@ -1,20 +1,10 @@
-ion-menu::part(backdrop) {
-    background-color: rgba(138, 3, 3, 0.5)
-  }
-  
-  ion-menu::part(container) {
-    border-radius: 0 20px 20px 0;
-    width: 55%;
-    box-shadow: 10px 0px 16px rgba(141, 33, 33, 0.18);
-  }
-  
   ion-content {
     --ion-background-color: #ffff;
     --ion-padding-top: 10px;
     --ion-padding-bottom: 10px;
   }
   ion-content h3 {
-    color: black;
+    color: white;
     margin-left: 1.5rem;
   }
   

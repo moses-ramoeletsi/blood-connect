@@ -10,14 +10,14 @@ export class EventsPage implements OnInit {
   public events = [
     {
       name: 'Maseru Blood Drive',
-      date: 'Saturday, May 10th, 2024',
+      date: 'Saturday, May 12th, 2024',
       time: '10:00 AM - 3:00 PM',
       location: 'Maseru Civic Center',
       description: 'Join us at the Maseru Blood Drive and make a difference in someone\'s life. Your donation can save up to three lives. Let\'s come together as a community to help those in need.'
     },
     {
       name: 'Save a Life Blood Donation Campaign',
-      date: 'Wednesday, May 15th, 2024',
+      date: 'Wednesday, May 14th, 2024',
       time: '9:00 AM - 1:00 PM',
       location: 'Maseru Central Hospital',
       description: 'Be a hero, donate blood! Your donation could be the gift of life someone is waiting for. Join us at the Save a Life Blood Donation Campaign at Maseru Central Hospital and help save lives.'

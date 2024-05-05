@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController} from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { RequestBloodService } from 'src/app/services/request-blood.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { GeolocationPosition } from '@capacitor/geolocation';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import {
+  LatLng,
+  LatLngTuple,
+  LeafletMouseEvent,
+  Map,
+  icon,
+  marker,
+  tileLayer,
+} from 'leaflet';
 
 @Component({
   selector: 'app-request-blood',
@@ -13,8 +22,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./request-blood.page.scss'],
 })
 export class RequestBloodPage implements OnInit {
-  // map: any;
-  // marker: any;
+  map: any;
+  marker: any;
   mapInitialized: boolean = false;
   userMarker: any;
   donors!: Observable<any[]>;
@@ -71,19 +80,70 @@ export class RequestBloodPage implements OnInit {
     this.getLocation();
   }
 
-  getLocation() {
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(
-        (position) =>{
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
+  initializeMap(center: LatLngTuple) {
+    if (!this.mapInitialized) {
+      this.map = new Map('map', {
+        center: center,
+        zoom: 8,
+      });
 
-          this.bloodRequestForm.location = latitude + "," + longitude
+      const tiles = tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+          maxZoom: 20,
+          minZoom: 4,
         }
-      )
+      );
+
+      tiles.addTo(this.map);
+
+      this.map.on('click', (event: LeafletMouseEvent) => {
+        this.updateMarkerPosition(event.latlng);
+      });
+
+      this.mapInitialized = true;
     }
   }
+  getLocation() {
+    Geolocation['getCurrentPosition']()
+      .then((position: any) => {
+        const geoPosition: GeolocationPosition =
+          position as GeolocationPosition;
+        const { latitude, longitude } = geoPosition.coords;
 
+        const userLocation: LatLngTuple = [latitude, longitude];
+
+        this.initializeMap(userLocation);
+        this.userMarker = marker(userLocation).addTo(this.map);
+
+        const customIcon = icon({
+          iconUrl: 'assets/images/pin.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+        });
+
+        this.userMarker.setIcon(customIcon);
+
+        this.updateCoordinatesInput(userLocation);
+      })
+      .catch((error) => {
+        console.error('Error getting user location:', error);
+      });
+  }
+  updateMarkerPosition(position: LatLng) {
+    if (this.userMarker) {
+      const { lat, lng } = position;
+      const newPosition: LatLngTuple = [lat, lng];
+      this.userMarker.setLatLng(newPosition);
+      this.updateCoordinatesInput(newPosition);
+
+    }
+  }
+  updateCoordinatesInput(position: LatLngTuple) {
+    this.bloodRequestForm.location = `${position[0]}, ${position[1]}`;
+  }
+  noMatchingRecipientsMessage: string = 'No matching recipients found.';
   async toggleNearByDonorContent() {
     this.showNearByDonorContent = !this.showNearByDonorContent;
     try {
@@ -94,7 +154,11 @@ export class RequestBloodPage implements OnInit {
       const [latitude, longitude] = userData.location
         .split(',')
         .map(parseFloat);
-      this.fetchNearbyDonors(userData.bloodGroup, latitude, longitude);
+        if(this.showNearByDonorContent){
+          this.fetchNearbyDonors(userData.bloodGroup, latitude, longitude);
+        }else {
+          window.location.reload();
+        }
     } catch (error) {
       this.showAlert('Error', 'Fetching user data!');
     }
@@ -129,14 +193,16 @@ export class RequestBloodPage implements OnInit {
 
         if (filteredDonors.length === 0) {
           this.showAlert('Matching Error', 'No matching donors found nearby.');
+          this.donors = of([]);
         } else {
           const sortedNearbyDonors = filteredDonors.sort(
             (a, b) => a.distance - b.distance
           );
-          this.donors = new Observable((observer) => {
-            observer.next(sortedNearbyDonors);
-            observer.complete();
-          });
+          this.donors = of (sortedNearbyDonors);
+          // this.donors = new Observable((observer) => {
+          //   observer.next(sortedNearbyDonors);
+          //   observer.complete();
+          // });
         }
       });
     } else {
@@ -179,29 +245,65 @@ export class RequestBloodPage implements OnInit {
     this.showMatchingResults = true;
     this.fetchDonors();
   }
-
   submitForm() {
-    this.firebaseService
-      .addRequest(this.bloodRequestForm)
-      .then(() => {
-        this.showAlert('Blood Request', 'Request added successfully!');
+    this.firebaseService.fetchCurrentUserById(this.userId)
+      .then(userData => {
+        this.bloodRequestForm.firstName = userData.firstName;
+        this.bloodRequestForm.address = userData.address;
+        this.bloodRequestForm.phoneNumber = userData.phoneNumber;
+        this.bloodRequestForm.status = 'Pending';
+  
+        this.firebaseService.addRequest(this.bloodRequestForm)
+          .then(() => {
+            this.showAlert('Blood Request', 'Request added successfully!');
+          })
+          .catch((error) => {
+            this.showAlert('Blood Request Error', 'Blood Request not sent!');
+          });
       })
-      .catch((error) => {
-        this.showAlert('Blood Request Error', 'Blood Request not sent!');
+      .catch(error => {
+        console.error('Error fetching current user data:', error);
+        this.showAlert('Error', 'Failed to fetch current user data');
       });
   }
-  sentRequestForm(donorId: string) {
-    this.bloodRequestForm.status = 'pending';
-    this.bloodRequestForm.donorId = donorId;
-    this.firebaseService
-      .sentRequest(this.bloodRequestForm)
-      .then(() => {
-        this.showAlert('Blood Request', 'Request send successfully!');
-      })
-      .catch((error) => {
-        this.showAlert('Blood Request Error', 'Blood Request not sent!');
-      });
-  }
+  
+  async requestBloodFromDonor(donorId: string) {
+    try {
+        const currentUser = await this.afAuth.currentUser;
+        if (currentUser) {
+            const currentUserId = currentUser.uid;
+            const userData = await this.firebaseService.fetchCurrentUserById(currentUserId);
+            const currentUserPhoneNumber = userData.phoneNumber;
+            const currentUserName = userData.firstName
+
+            const recipientData = await this.firebaseService.fetchRecipientDataById(currentUserId);
+            const recipientMessage = recipientData.message;
+
+            this.fireStore.collection('donors').doc(donorId).update({
+                status: 'Pending',
+                recipient_id: currentUserId,
+                recipient_phoneNumber: currentUserPhoneNumber,
+                recipient_name: currentUserName,
+                recipient_message: recipientMessage,
+            })
+            .then(() => {
+                console.log('Recipient status updated successfully');
+                this.showAlert('Success', 'Requets send Successfully!');
+                const button = document.getElementById('connect-button') as HTMLButtonElement;
+                if (button) {
+                    button.disabled = true;
+                }
+            })
+            .catch((error) => {
+                console.error('Error updating recipient status: ', error);
+                this.showAlert('Error', 'Failed to approve donation. Please try again later.');
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching current user data: ', error);
+        this.showAlert('Error', 'Failed to fetch current user data. Please try again later.');
+    }
+}
 
   showAlert(title: string, message: string) {
     this.alertController

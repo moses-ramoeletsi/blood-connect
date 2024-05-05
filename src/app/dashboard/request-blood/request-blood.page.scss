@@ -31,37 +31,20 @@ ion-content {
   border-bottom-right-radius: 90%;
 }
 
-img {
-  height: 100px;
-  width: auto;
-  margin: auto;
-  display: block;
-}
-
-.logo {
-  height: 40px;
+ion-img {
+  height: 45px;
   width: 45px;
-  margin-top: 2rem;
+  margin-top: 5px;
   display: block;
 }
+ 
 
 ion-grid {
   margin-top: 10%;
   height: max-content;
 }
 
-ion-img {
-  font-size: 3rem;
-  position: absolute;
-  margin-top: 5%;
-  left: 50%;
-  height: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  display: block;
-  color: black;
-}
+
 
 ion-card-content {
   text-align: center;
