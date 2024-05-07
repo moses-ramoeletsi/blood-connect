@@ -27,6 +27,7 @@ export class FacilityDonateBloodPage implements OnInit {
   recipients!: Observable<any[]>;
   bloodDonorForm = {
     name: '',
+    facilityType: '',
     address: '',
     phoneNumber: '',
     bloodGroup: '',
@@ -261,8 +262,10 @@ export class FacilityDonateBloodPage implements OnInit {
       .fetchCurrentUserById(this.userId)
       .then((userData) => {
         this.bloodDonorForm.name = userData.name;
+        this.bloodDonorForm.facilityType = userData.facilityType;
         this.bloodDonorForm.address = userData.address;
         this.bloodDonorForm.phoneNumber = userData.phoneNumber;
+        this.bloodDonorForm.transfusionType = 'Donor'
         this.firebaseService
           .addDonationRequest(this.bloodDonorForm)
           .then((res) => {
@@ -280,7 +283,7 @@ export class FacilityDonateBloodPage implements OnInit {
       });
   }
 
-  async donateToRecipient(recipientId: string) {
+  async donateToRecipient(recipientId: string, distance: string) {
     try {
       const currentUser = await this.afAuth.currentUser;
       if (currentUser) {
@@ -306,6 +309,7 @@ export class FacilityDonateBloodPage implements OnInit {
             donor_id: currentUserId,
             donor_phoneNumber: currentUserPhoneNumber,
             donor_name: currentUserName,
+            distance: distance
           })
           .then(() => {
             console.log('Recipient status updated successfully');

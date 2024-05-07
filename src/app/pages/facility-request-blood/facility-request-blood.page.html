@@ -117,7 +117,7 @@
             </ion-col>
             <ion-col size="12" size-sm="6">
               <ion-label class="additional-info">
-                <p><strong>Name:</strong> {{ donor.firstName }}</p>
+                <p><strong>Name:</strong> {{ donor.name }}</p>
                 <p>
                   <strong>Trasnfusion Type:</strong> {{ donor.transfusionType
                   }}
@@ -173,21 +173,6 @@
                 <ion-select-option value="O-">O-</ion-select-option>
               </ion-select>
               <br />
-              <ion-select
-                label="Transfusion Type"
-                name="transfusionType"
-                [(ngModel)]="bloodRequestForm.transfusionType"
-                label-placement="floating"
-                fill="outline"
-              >
-                <ion-select-option value="hospital"
-                  >Hospital</ion-select-option
-                >
-                <ion-select-option value="bloodBank"
-                  >Blood Bank</ion-select-option
-                >
-              </ion-select>
-              <br>
               <ion-select
                 label="Urgency"
                 name="urgency"

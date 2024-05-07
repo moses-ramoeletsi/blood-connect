@@ -30,6 +30,7 @@ export class FacilityRequestBloodPage implements OnInit {
   donors!: Observable<any[]>;
   bloodRequestForm = {
     name: '',
+    facilityTpe:'',
     phoneNumber: '',
     address:'',
     bloodGroup: '',
@@ -38,7 +39,6 @@ export class FacilityRequestBloodPage implements OnInit {
     location: '',
     message: '',
     status: '',
-    donorId: '',
   };
   userId: string = '';
   bloodGroups: string[] = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
@@ -251,8 +251,11 @@ export class FacilityRequestBloodPage implements OnInit {
     this.firebaseService.fetchCurrentUserById(this.userId)
       .then(userData => {
         this.bloodRequestForm.name = userData.name;
+        this.bloodRequestForm.facilityTpe = userData.facilityType;
+        this.bloodRequestForm.address = userData.address;
         this.bloodRequestForm.phoneNumber = userData.phoneNumber;
         this.bloodRequestForm.status = 'Pending';
+        this.bloodRequestForm.transfusionType = 'Recipient'
   
         this.firebaseService.addRequest(this.bloodRequestForm)
           .then(() => {

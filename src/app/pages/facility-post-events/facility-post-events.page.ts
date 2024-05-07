@@ -54,8 +54,10 @@ async postEvent(){
     this.fetchFacilityData(this.userId || '');
     this.event.host = this.name || ''; 
     await this.fireStore.addEvent(this.event);
-    console.log('Event posted successfully:', this.event);
+    this.showAlert('Success', 'Event posted successfully!');
+    console.log('Event posted successfully', this.event);
   } catch (error) {
+    this.showAlert('Error', 'Error posting event:!');
     console.error('Error posting event:', error);
   }
 }
@@ -78,6 +80,15 @@ getFormattedDateTime(dateTimeStr: string): { date: string; time: string } {
   const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
   return { date: formattedDate, time: formattedTime };
+}
+showAlert(title: string, message: string) {
+  this.alertController
+    .create({
+      header: title,
+      message: message,
+      buttons: ['OK'],
+    })
+    .then((alert) => alert.present());
 }
 }
 

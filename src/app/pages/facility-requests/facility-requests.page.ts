@@ -68,6 +68,7 @@ export class FacilityRequestsPage implements OnInit {
     this.requestData
       .fetchRecipientRequestById(userId)
       .then((userData) => {
+        console.log("usedata", userData);
         if (userData) {
           this.requests.push(userData);
         } else {

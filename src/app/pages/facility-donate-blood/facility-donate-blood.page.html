@@ -118,7 +118,7 @@
             </ion-col>
             <ion-col size="12" size-sm="6">
               <ion-label class="additional-info">
-                <p><strong>Name:</strong> {{ recipient.firstName }}</p>
+                <p><strong>Name:</strong> {{ recipient.name }}</p>
                 <p>
                   <strong>Trasnfusion Type:</strong> {{
                   recipient.transfusionType }}
@@ -173,20 +173,6 @@
                 <ion-select-option value="AB-">AB-</ion-select-option>
                 <ion-select-option value="O-"
                   >O-</ion-select-option
-                > </ion-select
-              ><br />
-              <ion-select
-                label="Transfusion Type"
-                name="transfusionType"
-                [(ngModel)]="bloodDonorForm.transfusionType"
-                label-placement="floating"
-                fill="outline"
-              >
-                <ion-select-option value="Hospital"
-                  >Hospital</ion-select-option
-                >
-                <ion-select-option value="Blood-Bank"
-                  >Blood Bank</ion-select-option
                 > </ion-select
               ><br />
               <ion-button
@@ -251,7 +237,7 @@
                           <p><strong>Location Coordinates:</strong> {{ recipient.location }}</p>
                           <p> <strong>Distance:</strong> {{ recipient.distance }}</p>
                       </ion-label>
-                      <ion-button class="connect-button" (click)="donateToRecipient(recipient.id)" [disabled]="recipient.status === 'Approved'">
+                      <ion-button class="connect-button" (click)="donateToRecipient(recipient.id, recipient.distance)" [disabled]="recipient.status === 'Approved'">
                         Donate
                     </ion-button>
                 
