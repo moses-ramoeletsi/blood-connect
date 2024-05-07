@@ -1,0 +1,72 @@
+<ion-content [fullscreen]="true">
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+          <h2 class="userName">Welcome <b>{{userName}}</b></h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+              alt="profile"
+              src="../../../assets/images/bloodConnect.png"
+            ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-button class="mycolor" (click)="logout()">Logout</ion-button>
+    </ion-header>
+    <ion-content class="ion-padding">
+      
+      <div class="blood-tips">
+        <ion-card class="tips-card">
+          <ion-card-header>
+            <h2>Blood Donation Tips</h2>
+          </ion-card-header>
+          <ion-card-content> {{ tips[currentTipIndex] }} </ion-card-content>
+        </ion-card>
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-card color="white" [routerLink]="['/facility-request-blood']">
+              <ion-card-header>
+                <ion-img src="../../../assets/images/search.png"></ion-img>
+              </ion-card-header>
+              <ion-card-content>Request Blood</ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <ion-card color="white" [routerLink]="['/facility-donate-blood']">
+              <ion-card-header>
+                <ion-img
+                  src="../../../assets/images/blood-drop.png"
+                ></ion-img>
+              </ion-card-header>
+              <ion-card-content>Donate Blood</ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <ion-card color="white" [routerLink]="['/facility-feed-back']">
+              <ion-card-header>
+                <ion-img src="../../../assets/images/feeback.png"></ion-img>
+              </ion-card-header>
+              <ion-card-content>FeedBack</ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <ion-card color="white" [routerLink]="['/facility-post-events']">
+              <ion-card-header>
+                <ion-img
+                  src="../../../assets/images/events.png"
+                ></ion-img>
+              </ion-card-header>
+              <ion-card-content>Events</ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </div>
+</ion-content>

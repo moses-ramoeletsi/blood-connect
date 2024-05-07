@@ -1,0 +1,125 @@
+<ion-content [fullscreen]="true">
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+          <h2>Events</h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+              alt="profile"
+              src="../../../assets/images/bloodConnect.png"
+            ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content [fullscreen]="true" class="ion-padding">
+      <ion-buttons routerLink="/facility-dashboard" style="color: black">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        <ion-label>Back</ion-label>
+      </ion-buttons>
+
+      <ion-fab
+        slot="fixed"
+        vertical="bottom"
+        horizontal="end"
+        class="ion-center-sm-down"
+      >
+        <ion-fab-button id="open-events-modal">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <ion-modal
+        [keepContentsMounted]="true"
+        trigger="open-events-modal"
+        #modal
+      >
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title class="ion-text-center">Post Event</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="modal.dismiss()">Cancel</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <form class="requestBlood-form" (ngSubmit)="postEvent()">
+              <ion-item>
+                <ion-input
+                  [(ngModel)]="event.event_title"
+                  name="event_title"
+                  label="Title"
+                  labelPlacement="stacked"
+                  type="text"
+                  placeholder="When to Donation"
+                  style="color: black"
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-textarea
+                  [(ngModel)]="event.description"
+                  name="description"
+                  label="Description"
+                  labelPlacement="stacked"
+                  style="color: black"
+                  placeholder="Type..."
+                ></ion-textarea>
+              </ion-item>
+
+              <ion-item>
+                <ion-input
+                  [(ngModel)]="event.location"
+                  name="location"
+                  label="Location"
+                  labelPlacement="stacked"
+                  type="text"
+                  placeholder="Maseru, Thoteng"
+                  style="color: black"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-datetime
+                  [(ngModel)]="event.date_and_time"
+                  name="date_and_time"
+                  displayFormat="MMM DD, YYYY HH:mm"
+                  placeholder="Select Date & Time"
+                  style="color: black"
+                ></ion-datetime>
+              </ion-item>
+
+              <ion-button class="mycolor" type="submit" expand="block"
+                >Post Event</ion-button
+              >
+            </form>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+      <div
+        *ngIf="events.length > 0; else noEvents"
+        class="upcoming-events"
+        style="background-color: transparent"
+      >
+        <ion-card *ngFor="let event of events" style="margin: 10px">
+          <ion-card-header class="ion-text-center">
+            <ion-card-title>{{ event.event_title }}</ion-card-title>
+            <ion-card-subtitle>{{event.host}}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Date: {{ getFormattedDateTime(event.date_and_time).date }}</p>
+            <p>Time: {{ getFormattedDateTime(event.date_and_time).time }}</p>
+            <p>Location: {{ event.location }}</p>
+            <p>{{ event.description }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <ng-template #noEvents>
+        <p style="color: brown">No events available</p>
+      </ng-template>
+    </ion-content>
+  </div></ion-content
+>

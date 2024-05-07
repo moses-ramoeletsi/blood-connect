@@ -1,0 +1,262 @@
+<ion-content [fullscreen]="true">
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+          <h2 style="color: white;">Donate</h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+            alt="profile"
+            src="../../../assets/images/bloodConnect.png"
+          ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding" *ngIf="!showNearBySeekerContent">
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-col size="12">
+          <div class="ion-text-start" style="display: flex; justify-content: space-between">
+            <ion-buttons routerLink="/facility-dashboard" style="color: black">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+              <ion-label>Back</ion-label>
+            </ion-buttons>
+            <ion-buttons routerLink="/facility-donation">
+              <ion-label class="label-color"> View Information</ion-label>
+            </ion-buttons>
+          </div>
+          <div class="ion-text-end">
+            <ion-button class="mycolor" (click)="toggleNearBySeekerContent()"
+              >Near By Seeker</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div class="choose-blood-group">
+        <h2>Select Your Blood Group</h2>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-col
+            size-lg="3"
+            size-md="6"
+            size-sm="12"
+            size="12"
+            *ngFor="let bloodGroup of bloodGroups"
+          >
+            <ion-card
+              class="blood-group-card"
+              (click)="pickBloodGroup(bloodGroup)"
+            >
+              <ion-row class="ion-align-items-center">
+                <ion-col size="12">
+                  <ion-label class="blood-group-label"
+                    >{{ bloodGroup }}</ion-label
+                  >
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div
+        *ngIf="pickedBloodGroup && showMatchingResults"
+        class="picked-blood-group"
+      >
+        <h2>Matching Recipients</h2>
+        <ion-card
+          class="match-blood-group-card"
+          *ngFor="let recipient of recipients | async"
+        >
+          <ion-row class="ion-align-items-center">
+            <ion-col size="12" size-sm="6">
+              <ion-avatar class="avatar">
+                <ion-label class="match-blood-group-label"
+                  >{{ pickedBloodGroup }}</ion-label
+                >
+              </ion-avatar>
+            </ion-col>
+            <ion-col size="12" size-sm="6">
+              <ion-label class="additional-info">
+                <p><strong>Name:</strong> {{ recipient.firstName }}</p>
+                <p>
+                  <strong>Trasnfusion Type:</strong> {{
+                  recipient.transfusionType }}
+                </p>
+                <p>
+                  <strong>Phone Number:</strong> {{ recipient.phoneNumber }}
+                </p>
+                <p><strong>Address:</strong> {{ recipient.address }}</p>
+                <p>
+                  <strong>Location Coordinates:</strong> {{ recipient.location
+                  }}
+                </p>
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        <ion-text *ngIf="!(recipients | async)?.length">
+          No matching recipients found.
+        </ion-text>
+      </div>
+
+      <div class="matching-blood-group" *ngIf="!showMatchingResults">
+        <h2>Available Recipients</h2>
+        <ion-card
+          class="match-blood-group-card"
+          *ngFor="let recipient of recipients | async"
+        >
+          <ion-row class="ion-align-items-center">
+            <ion-col size="12" size-sm="6">
+              <ion-avatar class="avatar">
+                <ion-label class="match-blood-group-label"
+                  >{{ recipient.bloodGroup }}</ion-label
+                >
+              </ion-avatar>
+            </ion-col>
+            <ion-col size="12" size-sm="6">
+              <ion-label class="additional-info">
+                <p><strong>Name:</strong> {{ recipient.firstName }}</p>
+                <p>
+                  <strong>Trasnfusion Type:</strong> {{
+                  recipient.transfusionType }}
+                </p>
+                <p><strong>Urgency:</strong> {{ recipient.urgency }}</p>
+                <p>
+                  <strong>Phone Number:</strong> {{ recipient.phoneNumber }}
+                </p>
+                <p><strong>Address:</strong> {{ recipient.address }}</p>
+                <p>
+                  <strong>Location Coordinates:</strong> {{ recipient.location
+                  }}
+                </p>
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </div>
+
+
+      <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button id="open-modal">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <ion-modal [keepContentsMounted]="true" trigger="open-modal" #modal>
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title class="ion-text-center">Donate Boold </ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="modal.dismiss()">Cancel</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <form class="requestBlood-form" (ngSubmit)="submitForm()">
+              <ion-select
+                label="Blood Group"
+                name="bloodGroup"
+                [(ngModel)]="bloodDonorForm.bloodGroup"
+                label-placement="floating"
+                fill="outline"
+              >
+                <ion-select-option value="A+">A+</ion-select-option>
+                <ion-select-option value="B+">B+</ion-select-option>
+                <ion-select-option value="AB+">AB+</ion-select-option>
+                <ion-select-option value="O+">O+</ion-select-option>
+                <ion-select-option value="A-">A-</ion-select-option>
+                <ion-select-option value="B-">B-</ion-select-option>
+                <ion-select-option value="AB-">AB-</ion-select-option>
+                <ion-select-option value="O-"
+                  >O-</ion-select-option
+                > </ion-select
+              ><br />
+              <ion-select
+                label="Transfusion Type"
+                name="transfusionType"
+                [(ngModel)]="bloodDonorForm.transfusionType"
+                label-placement="floating"
+                fill="outline"
+              >
+                <ion-select-option value="Hospital"
+                  >Hospital</ion-select-option
+                >
+                <ion-select-option value="Blood-Bank"
+                  >Blood Bank</ion-select-option
+                > </ion-select
+              ><br />
+              <ion-button
+                class="mycolor"
+                type="button"
+                expand="block"
+                (click)="getLocation()"
+                >Get Location</ion-button
+              >
+              <div id="map"></div>
+              <link
+                rel="stylesheet"
+                href="https://unpkg.com/leaflet/dist/leaflet.css"
+              />
+              <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+              <ion-input
+                label="Location Coordinates"
+                name="locationCoordinates"
+                [(ngModel)]="bloodDonorForm.location"
+                label-placement="floating"
+                fill="outline"
+                placeholder="Latitude, Longitude"
+                disabled
+              ></ion-input>
+              <ion-button class="mycolor" type="submit" expand="block"
+                >Submit</ion-button
+              >
+            </form>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </ion-content>
+
+    <ion-content class="ion-padding" *ngIf="showNearBySeekerContent">
+      <div class="ion-col ion-text-start">
+          <ion-buttons (click)="toggleNearBySeekerContent()" style="color: black">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+              <ion-label>Back</ion-label>
+          </ion-buttons>
+      </div>
+  
+      <div class="recipients">
+          <h2>Near By Recipients</h2>
+          
+          <div *ngIf="(recipients | async)?.length === 0">No matching recipients found.</div>
+          <ion-card class="match-recipient-card" *ngFor="let recipient of recipients | async">
+              <ion-row>
+                  <ion-col size="12" size-sm="6">
+                      <ion-avatar class="match-recipient-avatar">
+                          <ion-label>{{ recipient.bloodGroup }}</ion-label>
+                      </ion-avatar>
+                  </ion-col>
+              </ion-row>
+              <ion-row>
+                  <ion-col size="12" size-sm="6">
+                      <ion-label class="match-recipient-details">
+                          <p><strong>Name:</strong> {{ recipient.firstName }}</p>
+                          <p><strong>Trasnfusion Type:</strong> {{ recipient.transfusionType }}</p>
+                          <p><strong>Phone Number:</strong> {{ recipient.phoneNumber }}</p>
+                          <p><strong>Address:</strong> {{ recipient.address }}</p>
+                          <p><strong>Message:</strong>{{recipient.message}}</p>
+                          <p><strong>Location Coordinates:</strong> {{ recipient.location }}</p>
+                          <p> <strong>Distance:</strong> {{ recipient.distance }}</p>
+                      </ion-label>
+                      <ion-button class="connect-button" (click)="donateToRecipient(recipient.id)" [disabled]="recipient.status === 'Approved'">
+                        Donate
+                    </ion-button>
+                
+                  </ion-col>
+              </ion-row>
+          </ion-card>
+      </div>
+  </ion-content>

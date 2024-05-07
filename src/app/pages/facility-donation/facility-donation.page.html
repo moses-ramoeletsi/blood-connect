@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true">
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+          <h2 style="color: white;">Donor Information</h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+              alt="profile"
+              src="../../../assets/images/bloodConnect.png"
+            ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-buttons routerLink="/facility-dashboard" style="color: black">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        <ion-label>Back</ion-label>
+      </ion-buttons>
+
+      <ion-card class="donorInfo">
+        <ion-card-header>
+          <ion-card-title>Donor Information</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list lines="none" style="background-color: transparent">
+            <ion-item>
+              <ion-label>First Name</ion-label>
+              <ion-label>{{ donationForm.name }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Phone Number</ion-label>
+              <ion-label>{{ donationForm.phoneNumber }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Address</ion-label>
+              <ion-label>{{ donationForm.address }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Blood Group</ion-label>
+              <ion-label>{{ donationForm.bloodGroup }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Location</ion-label>
+              <ion-label>{{ donationForm.location }}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </div>
+</ion-content>

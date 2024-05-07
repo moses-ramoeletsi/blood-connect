@@ -43,7 +43,13 @@ export class LoginPagePage implements OnInit {
   
           this.fireServices.getUserDetails(user).subscribe((userData: any) => {
             if (userData && Object.keys(userData).length !== 0) { 
-              this.router.navigate(['/home']);
+              if (userData.facilityType === 'Hospital') {
+                this.router.navigate(['/facility-dashboard']); 
+              } else if (userData.facilityType === 'Blood Bank') {
+                this.router.navigate(['/facility-dashboard']); 
+              } else {
+                this.router.navigate(['/home']);
+              }
             } 
           });
         })
@@ -54,8 +60,6 @@ export class LoginPagePage implements OnInit {
       this.showAlert('Form Error', 'Please check the form fields.');
     }
   }
-  
-  
 
   showAlert(title: string, message: string) {
     this.alertController

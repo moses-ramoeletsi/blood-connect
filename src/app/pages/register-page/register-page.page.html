@@ -2,17 +2,18 @@
   <h1 class="myHeader">BLOOD CONNECT</h1>
   <img alt="car" src="../../../assets/images/bloodConnect.png" />
   <h2 class="register">Register</h2>
+  <h2 class="facility-register" routerLink="/register-facility">Facility Register</h2>
   <form [formGroup]="registerForm" class="ion-padding-top">
     <ion-input
       class="ion-text-center"
       fill="outline"
       type="text"
       placeholder="Enter First Name"
-      formControlName="firstName"
+      formControlName="name"
     ></ion-input>
     <br/>
-    <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
-      <span class="error-message" *ngIf="registerForm.get('firstName')?.errors?.['required']">First name is required.</span>
+    <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+      <span class="error-message" *ngIf="registerForm.get('name')?.errors?.['required']">First name is required.</span>
     </div>
     <ion-input
       class="ion-text-center"

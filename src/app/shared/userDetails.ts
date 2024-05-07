@@ -1,8 +1,13 @@
 export interface UserDetails {
-  firstName: string;
+  name: string;
   lastName:string;
   email: string;
   address: string;
   phoneNumber: number;
   password:string;
+}
+
+export interface FacilityDetails {
+  name: string,
+  
 }

@@ -1,5 +1,5 @@
 export interface BloodDonorDetails {
-  firstName: string;
+  name: string;
   address: string;
   phoneNumber: number;
   bloodGroup: string;

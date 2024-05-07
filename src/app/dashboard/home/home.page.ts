@@ -4,6 +4,7 @@ import { Observable, Subscription, filter, interval, map, switchMap } from 'rxjs
 import { UserService } from 'src/app/services/user.service';
 import { UserDetails } from './../../shared/userDetails';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,8 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     public fireServices: UserService,
     public afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {
     this.user = this.afAuth.authState.pipe(
       filter(user => user !== null),
@@ -39,15 +41,13 @@ export class HomePage implements OnInit, OnDestroy {
 
     this.user.subscribe((userDetails) => {
       if (userDetails) {
-        this.userName = userDetails.firstName;
+        this.userName = userDetails.name;
       }
     })
     
   }
 
   ngOnInit() {
-    this.refreshPage(); 
-
     this.timerSubscription = interval(5000).subscribe(() => {
       this.showNextTip();
     });
@@ -64,10 +64,30 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.router.navigate(['/login-page']);
+    this.presentLogoutAlert();
   }
+  async presentLogoutAlert() {
+    const alert = await this.alertController.create({
+      header: 'Confirm Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Logout cancelled');
+          }
+        }, {
+          text: 'Logout',
+          handler: () => {
+            this.router.navigate(['/login-page']);
+            console.log('User logged out');
+          }
+        }
+      ]
+    });
 
-  refreshPage() {
-   
+    await alert.present();
   }
 }

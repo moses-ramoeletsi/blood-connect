@@ -1,0 +1,89 @@
+ion-content {
+    --ion-background-color: #ffff;
+  }
+  
+  img {
+    height: 261px;
+    width: auto;
+    margin: auto;
+    display: block;
+  }
+  
+  .mycolor {
+    --background: var(--ion-color-btn);
+  }
+  
+  .page-link {
+    color: #8a0303;
+  }
+  
+  .myHeader {
+    text-align: center;
+    color: #8a0303;
+    font-weight: 800;
+  }
+  
+  ion-button {
+    font-size: 1.2rem;
+  }
+  
+  .register {
+    color: #8a0303;
+    text-align: center;
+  }
+
+  .facility-register {
+    color: #8a0303;
+    text-align: center;
+  }
+  
+  p {
+    color: #000;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  form ion-input, ion-select {
+    color: black;
+  }
+  
+  ion-input,
+  ion-select,
+  ion-button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  
+  @media (max-width: 320px) {
+    .myHeader {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .myHeader {
+      font-size: 20px;
+    }
+  }
+  
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .myHeader {
+      font-size: 22px;
+    }
+  }
+  
+  
+  @media (min-width: 1025px) {
+    .myHeader {
+      font-size: 28px;
+    }
+  }
+  
+  .error-message {
+    color: #df0303;
+  }

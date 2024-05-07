@@ -1,0 +1,140 @@
+<ion-content [fullscreen]="true">
+  <h1 class="myHeader">BLOOD CONNECT</h1>
+  <img alt="car" src="../../../assets/images/bloodConnect.png" />
+  <h2 class="register">Register</h2>
+  <h2 class="facility-register" routerLink="/register-page">
+    Individual Register
+  </h2>
+  <form [formGroup]="registerForm" class="ion-padding-top">
+    <ion-input
+      class="ion-text-center"
+      fill="outline"
+      type="text"
+      placeholder="Enter facility Name"
+      formControlName="name"
+    ></ion-input>
+    <br />
+    <div
+      *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
+    >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('name')?.errors?.['required']"
+        >First name is required.</span
+      >
+    </div>
+    <ion-select
+      label="Facility Type"
+      name="facilityType"
+      (ionChange)="updateFacilityType($event.detail.value)"
+      formControlName="facilityType"
+      label-placement="floating"
+      fill="outline"
+    >
+      <ion-select-option value="Hospital">Hospital</ion-select-option>
+      <ion-select-option value="Blood Bank">Blood Bank</ion-select-option>
+    </ion-select>
+    <br />
+    <ion-input
+      class="ion-text-center"
+      fill="outline"
+      type="email"
+      placeholder="Enter Email"
+      formControlName="email"
+    ></ion-input>
+    <br />
+    <div
+      *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+    >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('email')?.errors?.['required']"
+        >Email is required.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('email')?.errors?.['email']"
+        >Invalid email format.</span
+      >
+    </div>
+    <ion-input
+      class="ion-text-center"
+      type="text"
+      fill="outline"
+      placeholder="Address"
+      formControlName="address"
+    ></ion-input>
+    <br />
+    <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched">
+      <span class="error-message" *ngIf="registerForm.get('address')?.errors?.['required']">Address is required.</span>
+    </div>
+    <ion-input
+      class="ion-text-center"
+      type="tel"
+      fill="outline"
+      placeholder="Phone Number"
+      formControlName="phoneNumber"
+    ></ion-input>
+    <br />
+    <div
+      *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched"
+    >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('phoneNumber')?.errors?.['required']"
+        >Phone Number is required.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('phoneNumber')?.errors?.['pattern']"
+        >Invalid phone number format. Phone number should start with 6 or 5 and
+        have a minimum of 8 digits.</span
+      >
+    </div>
+    <ion-input
+      class="ion-text-center"
+      type="password"
+      fill="outline"
+      placeholder="Enter password"
+      formControlName="password"
+    ></ion-input>
+    <br />
+    <div
+      *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+    >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('password')?.errors?.['required']"
+        >Password is required.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('password')?.errors?.['minlength']"
+        >Password must be at least 6 characters long.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="registerForm.get('password')?.errors?.['pattern']"
+        >Password must contain characters(- _ ! $).</span
+      >
+    </div>
+    <ion-button
+      class="ion-padding ion-xxl mycolor"
+      expand="full"
+      type="submit"
+      (click)="signup()"
+      [disabled]="registerForm.invalid"
+    >
+      Register
+    </ion-button>
+  </form>
+  <div class="ion-text-center">
+    <p>
+      Already have an account? <br /><a
+        routerLink="/login-page"
+        class="page-link"
+        >Login here</a
+      >
+    </p>
+  </div>
+</ion-content>

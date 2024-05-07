@@ -14,7 +14,7 @@ import { DonationService } from 'src/app/services/donation.service';
 export class DonationRequestPage implements OnInit {
 
   donationForm = {
-    firstName: '',
+    name: '',
     address: '',
     phoneNumber: '',
     bloodGroup: '',
@@ -51,7 +51,7 @@ export class DonationRequestPage implements OnInit {
       .fetchDonorDataById(userId)
       .then((userData) => {
         if (userData) {
-          this.donationForm.firstName = userData.firstName;
+          this.donationForm.name = userData.name;
           this.donationForm.phoneNumber = userData.phoneNumber;
           this.donationForm.address = userData.address;
           this.donationForm.bloodGroup = userData.bloodGroup;

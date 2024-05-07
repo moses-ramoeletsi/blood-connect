@@ -28,7 +28,7 @@ export class RequestBloodPage implements OnInit {
   userMarker: any;
   donors!: Observable<any[]>;
   bloodRequestForm = {
-    firstName: '',
+    name: '',
     address: '',
     phoneNumber: '',
     bloodGroup: '',
@@ -65,7 +65,7 @@ export class RequestBloodPage implements OnInit {
     this.firebaseService
       .fetchRecipientDataById(userId)
       .then((userData) => {
-        this.bloodRequestForm.firstName = userData.firstName;
+        this.bloodRequestForm.name = userData.name;
         this.bloodRequestForm.phoneNumber = userData.phoneNumber;
         this.bloodRequestForm.address = userData.address;
         this.bloodRequestForm.bloodGroup = userData.bloodGroup;
@@ -84,7 +84,7 @@ export class RequestBloodPage implements OnInit {
     if (!this.mapInitialized) {
       this.map = new Map('map', {
         center: center,
-        zoom: 8,
+        zoom: 11,
       });
 
       const tiles = tileLayer(
@@ -198,11 +198,13 @@ export class RequestBloodPage implements OnInit {
           const sortedNearbyDonors = filteredDonors.sort(
             (a, b) => a.distance - b.distance
           );
-          this.donors = of (sortedNearbyDonors);
-          // this.donors = new Observable((observer) => {
-          //   observer.next(sortedNearbyDonors);
-          //   observer.complete();
-          // });
+          this.donors = of (sortedNearbyDonors.map (donor => {
+            return {
+              ...donor,
+              distance:donor.distance.toFixed(2) + ' km'
+            }
+          }));
+          
         }
       });
     } else {
@@ -248,10 +250,11 @@ export class RequestBloodPage implements OnInit {
   submitForm() {
     this.firebaseService.fetchCurrentUserById(this.userId)
       .then(userData => {
-        this.bloodRequestForm.firstName = userData.firstName;
+        this.bloodRequestForm.name = userData.name;
         this.bloodRequestForm.address = userData.address;
         this.bloodRequestForm.phoneNumber = userData.phoneNumber;
         this.bloodRequestForm.status = 'Pending';
+        this.bloodRequestForm.transfusionType = 'Recipient'
   
         this.firebaseService.addRequest(this.bloodRequestForm)
           .then(() => {
@@ -274,7 +277,7 @@ export class RequestBloodPage implements OnInit {
             const currentUserId = currentUser.uid;
             const userData = await this.firebaseService.fetchCurrentUserById(currentUserId);
             const currentUserPhoneNumber = userData.phoneNumber;
-            const currentUserName = userData.firstName
+            const currentUserName = userData.name
 
             const recipientData = await this.firebaseService.fetchRecipientDataById(currentUserId);
             const recipientMessage = recipientData.message;

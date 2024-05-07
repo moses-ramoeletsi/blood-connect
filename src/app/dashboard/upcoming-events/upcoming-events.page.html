@@ -1,10 +1,9 @@
-
 <ion-content [fullscreen]="true">
   <div class="ion-page" id="main-content">
     <ion-header>
       <ion-toolbar class="myMenu">
         <ion-buttons slot="start">
-         <h2>Events</h2>
+          <h2>Upcoming Events</h2>
         </ion-buttons>
         <ion-buttons slot="end">
           <ion-avatar>
@@ -21,20 +20,27 @@
         <ion-icon name="chevron-back-outline"></ion-icon>
         <ion-label>Back</ion-label>
       </ion-buttons>
-      <div class="upcoming-events" style="background-color: transparent;">
-        <ion-card *ngFor="let event of events" style="margin: 10px;">
-          <ion-card-header>
-            <ion-card-title>{{ event.name }}</ion-card-title>
+      <div
+        *ngIf="events.length > 0; else noEvents"
+        class="upcoming-events"
+        style="background-color: transparent"
+      >
+        <ion-card *ngFor="let event of events" style="margin: 10px">
+          <ion-card-header class="ion-text-center">
+            <ion-card-title>{{ event.event_title }}</ion-card-title>
+            <ion-card-subtitle>{{event.host}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <p>Date: {{ event.date }}</p>
-            <p>Time: {{ event.time }}</p>
+            <p>Date: {{ getFormattedDateTime(event.date_and_time).date }}</p>
+            <p>Time: {{ getFormattedDateTime(event.date_and_time).time }}</p>
             <p>Location: {{ event.location }}</p>
             <p>{{ event.description }}</p>
           </ion-card-content>
         </ion-card>
-        
       </div>
-      </ion-content>
+      <ng-template #noEvents>
+        <p style="color: brown">No events available</p>
+      </ng-template>
+    </ion-content>
   </div>
 </ion-content>

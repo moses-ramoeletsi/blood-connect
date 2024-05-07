@@ -1,5 +1,5 @@
 export interface BloodRequestDetails{
-    firstName: string;
+    name: string;
     address: string;
     phoneNumber: number;
     bloodGroup: string;

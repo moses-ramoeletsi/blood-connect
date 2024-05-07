@@ -13,7 +13,7 @@ import { take } from 'rxjs';
 })
 export class RecipientRequestPage implements OnInit {
   bloodRequetsForm = {
-    firstName: '',
+    name: '',
     address: '',
     phoneNumber: '',
     bloodGroup: '',
@@ -52,7 +52,7 @@ export class RecipientRequestPage implements OnInit {
       .fetchRecipientDataById(userId)
       .then((userData) => {
         if (userData) {
-          this.bloodRequetsForm.firstName = userData.firstName;
+          this.bloodRequetsForm.name = userData.name;
           this.bloodRequetsForm.phoneNumber = userData.phoneNumber;
           this.bloodRequetsForm.address = userData.address;
           this.bloodRequetsForm.bloodGroup = userData.bloodGroup;
@@ -89,10 +89,10 @@ export class RecipientRequestPage implements OnInit {
       header: 'Edit Request',
       inputs: [
         {
-          name: 'firstName',
+          name: 'name',
           type: 'text',
           placeholder: 'First Name',
-          value: request.firstName,
+          value: request.name,
         },
         {
           name: 'bloodGroup',

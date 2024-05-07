@@ -12,7 +12,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class RegisterPagePage implements OnInit {
   registerForm!: FormGroup;
   userData = {
-    firstName: '',
+    name: '',
     lastName: '',
     email: '',
     address: '',
@@ -29,7 +29,8 @@ export class RegisterPagePage implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
-      firstName: new FormControl('', Validators.required),
+    
+      name: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       address: new FormControl('', Validators.required),

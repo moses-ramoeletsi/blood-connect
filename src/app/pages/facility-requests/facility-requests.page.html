@@ -1,0 +1,87 @@
+<ion-content [fullscreen]="true">
+
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+          <h2 style="color: white;">Recipient Requests</h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+              alt="profile"
+              src="../../../assets/images/bloodConnect.png"
+            ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-buttons routerLink="/facility-dashboard" style="color: black">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        <ion-label>Back</ion-label>
+      </ion-buttons>
+      <ion-card class="recipientInfo">
+        <ion-card-header>
+          <ion-card-title>Recipient Information</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list lines="none" style="background-color: transparent;">
+            <ion-item>
+              <ion-label>First Name</ion-label>
+              <ion-label>{{ bloodRequetsForm.name }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Phone Number</ion-label>
+              <ion-label>{{ bloodRequetsForm.phoneNumber }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Address</ion-label>
+              <ion-label>{{ bloodRequetsForm.address }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Blood Group</ion-label>
+              <ion-label>{{ bloodRequetsForm.bloodGroup }}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Location</ion-label>
+              <ion-label>{{ bloodRequetsForm.location }}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    
+      <h2>Recipient Request</h2>
+      <ion-card *ngFor="let request of requests" class="request-card">
+        <ion-avatar class="avatar">
+          <ion-card-title class="blood-group">{{ request.bloodGroup }}</ion-card-title>
+        </ion-avatar>
+        <ion-card-header class="status">
+          <ion-card-subtitle>{{ request.status }}</ion-card-subtitle>
+        </ion-card-header>          
+        <ion-card-content class="requestInfo">
+          <p><strong>Name:</strong>{{ request.name }}</p>
+          <p><strong>Address:</strong> {{ request.address }}</p>
+          <p><strong>Location:</strong> {{ request.location }}</p>
+          <p><strong>Message:</strong> {{ request.message }}</p>
+          <div *ngIf="request.status !== 'Approved'">
+            <div class="button-container">
+              <ion-button (click)="editRequest(request)">Edit</ion-button>
+              <ion-button (click)="deleteRequest()">Delete</ion-button>
+            </div>
+          </div>
+          <div *ngIf="request.status === 'Approved'">
+              <h2 class="ion-text-center" style="font-style:italic" >Donor Details</h2>
+              <p><strong>Donor Name:</strong> {{ request.donor_name }}</p>
+              <p><strong>Donor Contacts:</strong> {{ request.donor_phoneNumber }}</p>
+              <p><strong>Distance:</strong> {{ request.distance }}</p>
+          </div>
+        
+        </ion-card-content>
+      </ion-card>
+      <div *ngIf="requests.length === 0" style="color: red">
+        No matching requests found.
+      </div>
+    </ion-content>
+  </div>
+</ion-content>

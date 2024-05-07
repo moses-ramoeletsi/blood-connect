@@ -1,0 +1,73 @@
+<ion-content [fullscreen]="true">
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="myMenu">
+        <ion-buttons slot="start">
+          <h2>FeedBack</h2>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-avatar>
+            <ion-img
+            alt="profile"
+            src="../../../assets/images/bloodConnect.png"
+          ></ion-img>
+          </ion-avatar>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="ion-text-start">
+        <ion-buttons routerLink="/facility-dashboard" style="color: black">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          <ion-label>Back</ion-label>
+        </ion-buttons>
+      </div>
+      <form class="feedback-form" (ngSubmit)="submitFeedBack()">
+        <h1>Feedback Form</h1>
+        <ion-input
+          label=" Name"
+          name="name"
+          label-placement="floating"
+          [(ngModel)]="feedBackForm.name"
+          fill="outline"
+          placeholder=" Enter Name"
+        ></ion-input>
+        <br />
+        <ion-input
+          label="Email (optional)"
+          name="emal"
+          [(ngModel)]="feedBackForm.email"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Enter Email"
+        ></ion-input>
+        <br />
+        <ion-select
+          label="FeedBack  type"
+          name="feedBackType"
+          [(ngModel)]="feedBackForm.feedBackType"
+          label-placement="floating"
+          fill="outline"
+        >
+          <ion-select-option value="suggestion">Suggestion</ion-select-option>
+          <ion-select-option value="issue"
+            >Issue</ion-select-option
+          > </ion-select
+        ><br />
+        <ion-textarea
+          label="Message"
+          name="message"
+          [(ngModel)]="feedBackForm.message"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Your message goes here..."
+        ></ion-textarea>
+        <br />
+
+        <ion-button class="mycolor" type="submit" expand="block"
+          >Submit</ion-button
+        >
+      </form>
+    </ion-content>
+  </div>
+</ion-content>

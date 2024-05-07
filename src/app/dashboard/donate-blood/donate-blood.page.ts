@@ -14,21 +14,19 @@ import {
   marker,
   tileLayer,
 } from 'leaflet';
-import * as firebase from 'firebase/compat';
 @Component({
   selector: 'app-donate-blood',
   templateUrl: './donate-blood.page.html',
   styleUrls: ['./donate-blood.page.scss'],
 })
 export class DonateBloodPage implements OnInit {
-
   map: any;
   marker: any;
   mapInitialized: boolean = false;
   userMarker: any;
   recipients!: Observable<any[]>;
   bloodDonorForm = {
-    firstName: '',
+    name: '',
     address: '',
     phoneNumber: '',
     bloodGroup: '',
@@ -65,7 +63,7 @@ export class DonateBloodPage implements OnInit {
     this.firebaseService
       .fetchRecipientDataById(userId)
       .then((userData) => {
-        this.bloodDonorForm.firstName = userData.firstName;
+        this.bloodDonorForm.name = userData.name;
         this.bloodDonorForm.phoneNumber = userData.phoneNumber;
         this.bloodDonorForm.address = userData.address;
         this.bloodDonorForm.bloodGroup = userData.bloodGroup;
@@ -135,7 +133,6 @@ export class DonateBloodPage implements OnInit {
       const newPosition: LatLngTuple = [lat, lng];
       this.userMarker.setLatLng(newPosition);
       this.updateCoordinatesInput(newPosition);
-
     }
   }
   updateCoordinatesInput(position: LatLngTuple) {
@@ -147,75 +144,74 @@ export class DonateBloodPage implements OnInit {
   async toggleNearBySeekerContent() {
     this.showNearBySeekerContent = !this.showNearBySeekerContent;
     try {
-        const userData = await this.firebaseService.fetchUserDataById(
-            this.userId
-        );
+      const userData = await this.firebaseService.fetchUserDataById(
+        this.userId
+      );
 
-        const [latitude, longitude] = userData.location
-            .split(',')
-            .map(parseFloat);
+      const [latitude, longitude] = userData.location
+        .split(',')
+        .map(parseFloat);
 
-        if (this.showNearBySeekerContent) {
-            this.fetchNearbySeekers(userData.bloodGroup, latitude, longitude);
-        } else {
-            // Reload the page
-            window.location.reload();
-        }
+      if (this.showNearBySeekerContent) {
+        this.fetchNearbySeekers(userData.bloodGroup, latitude, longitude);
+      } else {
+        // Reload the page
+        window.location.reload();
+      }
     } catch (error) {
-        this.showAlert('Error', 'Fetching user data!');
+      this.showAlert('Error', 'Fetching user data!');
     }
-}
-
-fetchNearbySeekers(bloodGroup: string, latitude: number, longitude: number) {
+  }
+  fetchNearbySeekers(bloodGroup: string, latitude: number, longitude: number) {
     if (!isNaN(latitude) && !isNaN(longitude)) {
-        const maxDistance = 1.5;
-
-        let nearbySeekersQuery = this.fireStore.collection('recipients', (ref) =>
-            ref.where('bloodGroup', '==', bloodGroup)
-        );
-
-        nearbySeekersQuery
-            .snapshotChanges()
-            .subscribe((donorSnapshots: any[]) => {
-                const nearbySeekers = donorSnapshots.map((doc: any) => {
-                    const recipientData = doc.payload.doc.data();
-                    const recipientId = doc.payload.doc.id;
-                    const donorLatitude = parseFloat(
-                        recipientData.location.split(',')[0]
-                    );
-                    const donorLongitude = parseFloat(
-                        recipientData.location.split(',')[1]
-                    );
-                    const distance = this.calculateDistance(
-                        latitude,
-                        longitude,
-                        donorLatitude,
-                        donorLongitude
-                    );
-                    return { id: recipientId, ...recipientData, distance };
-                });
-
-                const filteredRecipients = nearbySeekers.filter(
-                    (recipient) => recipient.distance <= maxDistance
-                );
-
-                if (filteredRecipients.length === 0) {
-                    
-                    this.showAlert('Matching Error', 'No matching donors found nearby.');
-                    
-                    this.recipients = of([]);
-                } else {
-                    const sortedNearbyDonors = filteredRecipients.sort(
-                        (a, b) => a.distance - b.distance
-                    );
-                    this.recipients = of(sortedNearbyDonors);
-                }
-            });
-    } else {
-        console.error('Invalid user location');
-    }
-}
+      const maxDistance = 1.5;
   
+      let nearbySeekersQuery = this.fireStore.collection('recipients', (ref) =>
+        ref.where('bloodGroup', '==', bloodGroup)
+      );
+  
+      nearbySeekersQuery
+        .snapshotChanges()
+        .subscribe((donorSnapshots: any[]) => {
+          const nearbySeekers = donorSnapshots.map((doc: any) => {
+            const recipientData = doc.payload.doc.data();
+            const recipientId = doc.payload.doc.id;
+            const donorLatitude = parseFloat(recipientData.location.split(',')[0]);
+            const donorLongitude = parseFloat(recipientData.location.split(',')[1]);
+            const distance = this.calculateDistance(
+              latitude,
+              longitude,
+              donorLatitude,
+              donorLongitude
+            );
+            return { id: recipientId, ...recipientData, distance };
+          });
+  
+          const filteredRecipients = nearbySeekers.filter(
+            (recipient) => recipient.distance <= maxDistance
+          );
+  
+          if (filteredRecipients.length === 0) {
+            this.showAlert('Matching Error', 'No matching donors found nearby.');
+            this.recipients = of([]);
+          } else {
+            const sortedNearbyDonors = filteredRecipients.sort(
+              (a, b) => a.distance - b.distance
+            );
+            this.recipients = of(sortedNearbyDonors.map(recipient => {
+              return {
+                ...recipient,
+                distance: recipient.distance.toFixed(2) + ' km'
+              };
+            }));
+          }
+        });
+    } else {
+      console.error('Invalid user location');
+    }
+  }
+
+
   calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
     const R = 6371;
     const dLat = this.deg2rad(lat2 - lat1);
@@ -251,65 +247,77 @@ fetchNearbySeekers(bloodGroup: string, latitude: number, longitude: number) {
     this.fetchRecipients();
   }
   submitForm() {
-    this.firebaseService.fetchCurrentUserById(this.userId)
-      .then(userData => {
-        this.bloodDonorForm.firstName = userData.firstName;
+    this.firebaseService
+      .fetchCurrentUserById(this.userId)
+      .then((userData) => {
+        this.bloodDonorForm.name = userData.name;
         this.bloodDonorForm.address = userData.address;
         this.bloodDonorForm.phoneNumber = userData.phoneNumber;
-        this.firebaseService.addDonationRequest(this.bloodDonorForm)
-          .then(res => {
+        this.bloodDonorForm.transfusionType = 'Donor';
+        this.firebaseService
+          .addDonationRequest(this.bloodDonorForm)
+          .then((res) => {
             this.showAlert('Donor Posted', 'Donor successfully added!');
           })
-          .catch(error => {
-            this.showAlert('Donor Post Error', 'Error occurred! Donation request not sent!');
+          .catch((error) => {
+            this.showAlert(
+              'Donor Post Error',
+              'Error occurred! Donation request not sent!'
+            );
           });
       })
-      .catch(error => {
+      .catch((error) => {
         this.showAlert('User Data Error', 'Error fetching user data!');
       });
   }
 
-  async donateToRecipient(recipientId: string) {
+  async donateToRecipient(recipientId: string, distance: string) {
     try {
-        const currentUser = await this.afAuth.currentUser;
-        if (currentUser) {
-            const currentUserId = currentUser.uid;
-            const userData = await this.firebaseService.fetchCurrentUserById(currentUserId);
-            const currentUserPhoneNumber = userData.phoneNumber;
-            const currentUserName = userData.firstName
+      const currentUser = await this.afAuth.currentUser;
+      if (currentUser) {
+        const currentUserId = currentUser.uid;
+        const userData = await this.firebaseService.fetchCurrentUserById(
+          currentUserId
+        );
+        const currentUserPhoneNumber = userData.phoneNumber;
+        const currentUserName = userData.name;
 
-            console.log('Current User ID:', currentUserId);
-            console.log('username: ', currentUserName);
-          
-            if (currentUserPhoneNumber) {
-              console.log('Current User Phone Number:', currentUserPhoneNumber); 
+        this.fireStore
+          .collection('recipients')
+          .doc(recipientId)
+          .update({
+            status: 'Approved',
+            donor_id: currentUserId,
+            donor_phoneNumber: currentUserPhoneNumber,
+            donor_name: currentUserName,
+            distance: distance
+          })
+          .then(() => {
+            console.log('Recipient status updated successfully');
+            this.showAlert('Success', 'Donation Approved Successfully!');
+            const button = document.getElementById(
+              'connect-button'
+            ) as HTMLButtonElement;
+            if (button) {
+              button.disabled = true;
             }
-            
-
-            this.fireStore.collection('recipients').doc(recipientId).update({
-                status: 'Approved',
-                donor_id: currentUserId,
-                donor_phoneNumber: currentUserPhoneNumber,
-                donor_name: currentUserName,
-            })
-            .then(() => {
-                console.log('Recipient status updated successfully');
-                this.showAlert('Success', 'Donation Approved Successfully!');
-                const button = document.getElementById('connect-button') as HTMLButtonElement;
-                if (button) {
-                    button.disabled = true;
-                }
-            })
-            .catch((error) => {
-                console.error('Error updating recipient status: ', error);
-                this.showAlert('Error', 'Failed to approve donation. Please try again later.');
-            });
-        }
+          })
+          .catch((error) => {
+            console.error('Error updating recipient status: ', error);
+            this.showAlert(
+              'Error',
+              'Failed to approve donation. Please try again later.'
+            );
+          });
+      }
     } catch (error) {
-        console.error('Error fetching current user data: ', error);
-        this.showAlert('Error', 'Failed to fetch current user data. Please try again later.');
+      console.error('Error fetching current user data: ', error);
+      this.showAlert(
+        'Error',
+        'Failed to fetch current user data. Please try again later.'
+      );
     }
-}
+  }
 
   showAlert(title: string, message: string) {
     this.alertController

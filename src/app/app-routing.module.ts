@@ -41,8 +41,40 @@ const routes: Routes = [
     loadChildren: () => import('./dashboard/donation-request/donation-request.module').then( m => m.DonationRequestPageModule)
   },
   {
-    path: 'events',
-    loadChildren: () => import('./dashboard/events/events.module').then( m => m.EventsPageModule)
+    path: 'upcoming-events',
+    loadChildren: () => import('./dashboard/upcoming-events/upcoming-events.module').then( m => m.UpcomingEventsPageModule)
+  },
+  {
+    path: 'register-facility',
+    loadChildren: () => import('./pages/register-facility/register-facility.module').then( m => m.RegisterFacilityPageModule)
+  },
+  {
+    path: 'facility-dashboard',
+    loadChildren: () => import('./pages/facility-dashboard/facility-dashboard.module').then( m => m.FacilityDashboardPageModule)
+  },
+  {
+    path: 'facility-post-events',
+    loadChildren: () => import('./pages/facility-post-events/facility-post-events.module').then( m => m.FacilityPostEventsPageModule)
+  },
+  {
+    path: 'facility-request-blood',
+    loadChildren: () => import('./pages/facility-request-blood/facility-request-blood.module').then( m => m.FacilityRequestBloodPageModule)
+  },
+  {
+    path: 'facility-donate-blood',
+    loadChildren: () => import('./pages/facility-donate-blood/facility-donate-blood.module').then( m => m.FacilityDonateBloodPageModule)
+  },
+  {
+    path: 'facility-requests',
+    loadChildren: () => import('./pages/facility-requests/facility-requests.module').then( m => m.FacilityRequestsPageModule)
+  },
+  {
+    path: 'facility-donation',
+    loadChildren: () => import('./pages/facility-donation/facility-donation.module').then( m => m.FacilityDonationPageModule)
+  },
+  {
+    path: 'facility-feed-back',
+    loadChildren: () => import('./pages/facility-feed-back/facility-feed-back.module').then( m => m.FacilityFeedBackPageModule)
   },
 ];
 
