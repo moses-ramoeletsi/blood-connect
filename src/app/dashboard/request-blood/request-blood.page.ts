@@ -22,6 +22,7 @@ import {
   styleUrls: ['./request-blood.page.scss'],
 })
 export class RequestBloodPage implements OnInit {
+  mapHeight: number = 300;
   map: any;
   marker: any;
   mapInitialized: boolean = false;
